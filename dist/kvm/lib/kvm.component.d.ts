@@ -1,8 +1,10 @@
-import { ElementRef, EventEmitter, OnInit } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, OnInit } from '@angular/core';
 import { IDataProcessor, ILogger, KeyBoardHelper, MouseHelper } from '@open-amt-cloud-toolkit/ui-toolkit/core';
+import { KvmService } from './kvm.service';
 import { Subscription } from 'rxjs';
 import * as i0 from "@angular/core";
-export declare class KvmComponent implements OnInit {
+export declare class KvmComponent implements OnInit, AfterViewInit {
+    private readonly devicesService;
     canvas: ElementRef | undefined;
     context: CanvasRenderingContext2D;
     width: number;
@@ -32,8 +34,18 @@ export declare class KvmComponent implements OnInit {
         value: number;
         viewValue: string;
     }[];
-    constructor();
+    constructor(devicesService: KvmService);
     ngOnInit(): void;
+    ngAfterViewInit(): void;
+    instantiate(): void;
+    onConnectionStateChange: (redirector: any, state: number) => any;
+    onRedirectorError(): void;
+    init(): void;
+    setAmtFeatures(): void;
+    autoConnect(): void;
+    checkPowerStatus(): boolean;
+    reset: () => void;
+    stopKvm: () => void;
     ngDoCheck(): void;
     onMouseup(event: MouseEvent): void;
     onMousedown(event: MouseEvent): void;

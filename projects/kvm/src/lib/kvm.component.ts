@@ -10,22 +10,29 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
+  AMTDesktop,
+  AMTKvmDataRedirector,
   ConsoleLogger,
+  DataProcessor,
   IDataProcessor,
   ILogger,
   KeyBoardHelper,
   MouseHelper,
+  Protocol,
 } from '@open-amt-cloud-toolkit/ui-toolkit/core';
 import { environment } from '../environments/environment';
-import { Subscription } from 'rxjs';
-// import { ActivatedRoute, Router } from '@angular/router';
+// import { ActivatedRoute } from '@angular/router';
+import { KvmService } from './kvm.service';
+import { fromEvent, interval, of, Subscription, timer } from 'rxjs';
+import { catchError, finalize, mergeMap, throttleTime } from 'rxjs/operators';
+// import { AuthService } from './auth.service'
 
 @Component({
   selector: 'amt-kvm',
   templateUrl: './kvm.component.html',
   styles: [],
 })
-export class KvmComponent implements OnInit {
+export class KvmComponent implements OnInit, AfterViewInit {
   @ViewChild('canvas', { static: false }) canvas: ElementRef | undefined;
   public context!: CanvasRenderingContext2D;
 
@@ -60,23 +67,171 @@ export class KvmComponent implements OnInit {
     { value: 2, viewValue: 'RLE 16' },
   ];
 
-  constructor() {
-    console.log('comming inside with new bundle files');
+  constructor(
+    private readonly devicesService: KvmService,
+    // public readonly activatedRoute: ActivatedRoute
+  ) {
     if (environment.mpsServer.includes('/mps')) {
       //handles kong route
       this.server = `${environment.mpsServer.replace('http', 'ws')}/ws/relay`;
     }
   }
-  // ngOnDestroy(): void {
-  //   throw new Error('Method not implemented.');
-  // }
-  // ngAfterViewInit(): void {
-  //   throw new Error('Method not implemented.');
-  // }
 
   ngOnInit(): void {
-    this.logger = new ConsoleLogger(1)
+    this.logger = new ConsoleLogger(1);
+    // this.activatedRoute.params.subscribe((params) => {
+    //   this.isLoading = true;
+    //   this.deviceId = params.id;
+    // });
+    this.stopSocketSubscription = this.devicesService.stopwebSocket.subscribe(
+      () => {
+        this.stopKvm();
+      }
+    );
+    this.startSocketSubscription =
+      this.devicesService.connectKVMSocket.subscribe(() => {
+        this.setAmtFeatures();
+      });
+    this.timeInterval = interval(15000)
+      .pipe(mergeMap(() => this.devicesService.getPowerState(this.deviceId)))
+      .subscribe();
   }
+
+  ngAfterViewInit(): void {
+    this.setAmtFeatures();
+  }
+
+  instantiate(): void {
+    this.context = this.canvas?.nativeElement.getContext('2d');
+    this.redirector = new AMTKvmDataRedirector(
+      this.logger,
+      Protocol.KVM,
+      new FileReader(),
+      this.deviceId,
+      16994,
+      '',
+      '',
+      0,
+      0,
+      // this.authService.getLoggedUserToken(),
+      this.server
+    );
+    this.module = new AMTDesktop(this.logger as any, this.context);
+    this.dataProcessor = new DataProcessor(
+      this.logger,
+      this.redirector,
+      this.module
+    );
+    this.mouseHelper = new MouseHelper(this.module, this.redirector, 200);
+    this.keyboardHelper = new KeyBoardHelper(this.module, this.redirector);
+
+    this.redirector.onProcessData = this.module.processData.bind(this.module);
+    this.redirector.onStart = this.module.start.bind(this.module);
+    this.redirector.onNewState = this.module.onStateChange.bind(this.module);
+    this.redirector.onSendKvmData = this.module.onSendKvmData.bind(this.module);
+    this.redirector.onStateChanged = this.onConnectionStateChange.bind(this);
+    this.redirector.onError = this.onRedirectorError.bind(this);
+    this.module.onSend = this.redirector.send.bind(this.redirector);
+    this.module.onProcessData = this.dataProcessor.processData.bind(
+      this.dataProcessor
+    );
+    this.module.bpp = this.selected;
+    this.mouseMove = fromEvent(this.canvas?.nativeElement, 'mousemove');
+    this.mouseMove.pipe(throttleTime(200)).subscribe((event: any) => {
+      if (this.mouseHelper != null) {
+        this.mouseHelper.mousemove(event);
+      }
+    });
+  }
+
+  onConnectionStateChange = (redirector: any, state: number): any => {
+    this.deviceState = state;
+    this.deviceStatus.emit(state);
+  };
+
+  onRedirectorError(): void {
+    this.reset();
+  }
+
+  init(): void {
+    this.devicesService
+      .getPowerState(this.deviceId)
+      .pipe(
+        catchError(() => {
+          // this.snackBar.open($localize`Error retrieving power status`, undefined, SnackbarDefaults.defaultError)
+          return of();
+        }),
+        finalize(() => {})
+      )
+      .subscribe((data) => {
+        this.powerState = data;
+        this.isPoweredOn = this.checkPowerStatus();
+        if (!this.isPoweredOn) {
+          this.isLoading = false;
+          // const dialog = this.dialog.open(PowerUpAlertComponent)
+          // dialog.afterClosed().subscribe(result => {
+          //   if (result) {
+          //     this.isLoading = true
+          //     this.devicesService.sendPowerAction(this.deviceId, 2).pipe().subscribe(data => {
+          //       this.instantiate()
+          //       setTimeout(() => {
+          //         this.isLoading = false
+          //         this.autoConnect()
+          //       }, 4000)
+          //     })
+          //   }
+          // })
+        } else {
+          this.instantiate();
+          setTimeout(() => {
+            this.isLoading = false;
+            this.autoConnect()
+          }, 0);
+        }
+      });
+  }
+
+  setAmtFeatures(): void {
+    this.isLoading = true;
+    console.log('coming inside in setAmtfeatures');
+    this.devicesService
+      .setAmtFeatures(this.deviceId)
+      .pipe(
+        catchError(() => {
+          // this.snackBar.open($localize`Error enabling kvm`, undefined, SnackbarDefaults.defaultError)
+          this.init();
+          return of();
+        }),
+        finalize(() => {})
+      )
+      .subscribe(() => this.init());
+  }
+
+  autoConnect (): void {
+    if (this.redirector != null) {
+      this.redirector.start(WebSocket)
+      this.keyboardHelper.GrabKeyInput()
+    }
+  }
+
+  checkPowerStatus(): boolean {
+    return this.powerState.powerstate === 2;
+  }
+
+  reset = (): void => {
+    this.redirector = null;
+    this.module = null;
+    this.dataProcessor = null;
+    this.height = 400;
+    this.width = 400;
+    this.instantiate();
+  };
+
+  stopKvm = (): void => {
+    this.redirector.stop();
+    this.keyboardHelper.UnGrabKeyInput();
+    this.reset();
+  };
 
   ngDoCheck(): void {
     if (this.selectedAction !== this.previousAction) {
@@ -86,13 +241,13 @@ export class KvmComponent implements OnInit {
 
   onMouseup(event: MouseEvent): void {
     if (this.mouseHelper != null) {
-      this.mouseHelper.mouseup(event)
+      this.mouseHelper.mouseup(event);
     }
   }
 
   onMousedown(event: MouseEvent): void {
     if (this.mouseHelper != null) {
-      this.mouseHelper.mousedown(event)
+      this.mouseHelper.mousedown(event);
     }
   }
 }

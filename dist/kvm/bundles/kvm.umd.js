@@ -1,24 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@open-amt-cloud-toolkit/ui-toolkit/core')) :
-    typeof define === 'function' && define.amd ? define('kvm', ['exports', '@angular/core', '@open-amt-cloud-toolkit/ui-toolkit/core'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.kvm = {}, global.ng.core, global['@open-amt-cloud-toolkit']['ui-toolkit'].core));
-}(this, (function (exports, i0, core) { 'use strict';
-
-    var KvmService = /** @class */ (function () {
-        function KvmService() {
-        }
-        return KvmService;
-    }());
-    KvmService.ɵfac = function KvmService_Factory(t) { return new (t || KvmService)(); };
-    KvmService.ɵprov = i0.ɵɵdefineInjectable({ token: KvmService, factory: KvmService.ɵfac, providedIn: 'root' });
-    (function () {
-        (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(KvmService, [{
-                type: i0.Injectable,
-                args: [{
-                        providedIn: 'root'
-                    }]
-            }], function () { return []; }, null);
-    })();
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/operators'), require('@angular/common/http'), require('@open-amt-cloud-toolkit/ui-toolkit/core'), require('rxjs'), require('@angular/platform-browser')) :
+    typeof define === 'function' && define.amd ? define('kvm', ['exports', '@angular/core', 'rxjs/operators', '@angular/common/http', '@open-amt-cloud-toolkit/ui-toolkit/core', 'rxjs', '@angular/platform-browser'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.kvm = {}, global.ng.core, global.rxjs.operators, global.ng.common.http, global['@open-amt-cloud-toolkit']['ui-toolkit'].core, global.rxjs, global.ng.platformBrowser));
+}(this, (function (exports, i0, operators, i1, core, rxjs, platformBrowser) { 'use strict';
 
     var environment = {
         production: false,
@@ -26,10 +10,44 @@
         rpsServer: 'https://localhost/rps'
     };
 
+    var KvmService = /** @class */ (function () {
+        function KvmService(http) {
+            this.http = http;
+            this.connectKVMSocket = new i0.EventEmitter(false);
+            this.stopwebSocket = new i0.EventEmitter(false);
+        }
+        KvmService.prototype.setAmtFeatures = function (deviceId) {
+            var payload = { userConsent: 'none', enableKVM: true, enableSOL: true, enableIDER: true };
+            return this.http.post(environment.mpsServer + "/api/v1/amt/features/" + deviceId, payload)
+                .pipe(operators.catchError(function (err) {
+                throw err;
+            }));
+        };
+        KvmService.prototype.getPowerState = function (deviceId) {
+            return this.http.get(environment.mpsServer + "/api/v1/amt/power/state/" + deviceId)
+                .pipe(operators.catchError(function (err) {
+                throw err;
+            }));
+        };
+        return KvmService;
+    }());
+    KvmService.ɵfac = function KvmService_Factory(t) { return new (t || KvmService)(i0.ɵɵinject(i1.HttpClient)); };
+    KvmService.ɵprov = i0.ɵɵdefineInjectable({ token: KvmService, factory: KvmService.ɵfac, providedIn: 'platform' });
+    (function () {
+        (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(KvmService, [{
+                type: i0.Injectable,
+                args: [{
+                        providedIn: 'platform'
+                    }]
+            }], function () { return [{ type: i1.HttpClient }]; }, null);
+    })();
+
     var _c0 = ["canvas"];
-    // import { ActivatedRoute, Router } from '@angular/router';
+    // import { AuthService } from './auth.service'
     var KvmComponent = /** @class */ (function () {
-        function KvmComponent() {
+        function KvmComponent(devicesService) {
+            var _this = this;
+            this.devicesService = devicesService;
             // //setting a width and height for the canvas
             this.width = 400;
             this.height = 400;
@@ -49,20 +67,136 @@
                 { value: 1, viewValue: 'RLE 8' },
                 { value: 2, viewValue: 'RLE 16' },
             ];
-            console.log('comming inside with new bundle files');
+            this.onConnectionStateChange = function (redirector, state) {
+                _this.deviceState = state;
+                _this.deviceStatus.emit(state);
+            };
+            this.reset = function () {
+                _this.redirector = null;
+                _this.module = null;
+                _this.dataProcessor = null;
+                _this.height = 400;
+                _this.width = 400;
+                _this.instantiate();
+            };
+            this.stopKvm = function () {
+                _this.redirector.stop();
+                _this.keyboardHelper.UnGrabKeyInput();
+                _this.reset();
+            };
             if (environment.mpsServer.includes('/mps')) {
                 //handles kong route
                 this.server = environment.mpsServer.replace('http', 'ws') + "/ws/relay";
             }
         }
-        // ngOnDestroy(): void {
-        //   throw new Error('Method not implemented.');
-        // }
-        // ngAfterViewInit(): void {
-        //   throw new Error('Method not implemented.');
-        // }
         KvmComponent.prototype.ngOnInit = function () {
+            var _this = this;
             this.logger = new core.ConsoleLogger(1);
+            // this.activatedRoute.params.subscribe((params) => {
+            //   this.isLoading = true;
+            //   this.deviceId = params.id;
+            // });
+            this.stopSocketSubscription = this.devicesService.stopwebSocket.subscribe(function () {
+                _this.stopKvm();
+            });
+            this.startSocketSubscription =
+                this.devicesService.connectKVMSocket.subscribe(function () {
+                    _this.setAmtFeatures();
+                });
+            this.timeInterval = rxjs.interval(15000)
+                .pipe(operators.mergeMap(function () { return _this.devicesService.getPowerState(_this.deviceId); }))
+                .subscribe();
+        };
+        KvmComponent.prototype.ngAfterViewInit = function () {
+            this.setAmtFeatures();
+        };
+        KvmComponent.prototype.instantiate = function () {
+            var _this = this;
+            var _a, _b;
+            this.context = (_a = this.canvas) === null || _a === void 0 ? void 0 : _a.nativeElement.getContext('2d');
+            this.redirector = new core.AMTKvmDataRedirector(this.logger, core.Protocol.KVM, new FileReader(), this.deviceId, 16994, '', '', 0, 0, 
+            // this.authService.getLoggedUserToken(),
+            this.server);
+            this.module = new core.AMTDesktop(this.logger, this.context);
+            this.dataProcessor = new core.DataProcessor(this.logger, this.redirector, this.module);
+            this.mouseHelper = new core.MouseHelper(this.module, this.redirector, 200);
+            this.keyboardHelper = new core.KeyBoardHelper(this.module, this.redirector);
+            this.redirector.onProcessData = this.module.processData.bind(this.module);
+            this.redirector.onStart = this.module.start.bind(this.module);
+            this.redirector.onNewState = this.module.onStateChange.bind(this.module);
+            this.redirector.onSendKvmData = this.module.onSendKvmData.bind(this.module);
+            this.redirector.onStateChanged = this.onConnectionStateChange.bind(this);
+            this.redirector.onError = this.onRedirectorError.bind(this);
+            this.module.onSend = this.redirector.send.bind(this.redirector);
+            this.module.onProcessData = this.dataProcessor.processData.bind(this.dataProcessor);
+            this.module.bpp = this.selected;
+            this.mouseMove = rxjs.fromEvent((_b = this.canvas) === null || _b === void 0 ? void 0 : _b.nativeElement, 'mousemove');
+            this.mouseMove.pipe(operators.throttleTime(200)).subscribe(function (event) {
+                if (_this.mouseHelper != null) {
+                    _this.mouseHelper.mousemove(event);
+                }
+            });
+        };
+        KvmComponent.prototype.onRedirectorError = function () {
+            this.reset();
+        };
+        KvmComponent.prototype.init = function () {
+            var _this = this;
+            this.devicesService
+                .getPowerState(this.deviceId)
+                .pipe(operators.catchError(function () {
+                // this.snackBar.open($localize`Error retrieving power status`, undefined, SnackbarDefaults.defaultError)
+                return rxjs.of();
+            }), operators.finalize(function () { }))
+                .subscribe(function (data) {
+                _this.powerState = data;
+                _this.isPoweredOn = _this.checkPowerStatus();
+                if (!_this.isPoweredOn) {
+                    _this.isLoading = false;
+                    // const dialog = this.dialog.open(PowerUpAlertComponent)
+                    // dialog.afterClosed().subscribe(result => {
+                    //   if (result) {
+                    //     this.isLoading = true
+                    //     this.devicesService.sendPowerAction(this.deviceId, 2).pipe().subscribe(data => {
+                    //       this.instantiate()
+                    //       setTimeout(() => {
+                    //         this.isLoading = false
+                    //         this.autoConnect()
+                    //       }, 4000)
+                    //     })
+                    //   }
+                    // })
+                }
+                else {
+                    _this.instantiate();
+                    setTimeout(function () {
+                        _this.isLoading = false;
+                        _this.autoConnect();
+                    }, 0);
+                }
+            });
+        };
+        KvmComponent.prototype.setAmtFeatures = function () {
+            var _this = this;
+            this.isLoading = true;
+            console.log('coming inside in setAmtfeatures');
+            this.devicesService
+                .setAmtFeatures(this.deviceId)
+                .pipe(operators.catchError(function () {
+                // this.snackBar.open($localize`Error enabling kvm`, undefined, SnackbarDefaults.defaultError)
+                _this.init();
+                return rxjs.of();
+            }), operators.finalize(function () { }))
+                .subscribe(function () { return _this.init(); });
+        };
+        KvmComponent.prototype.autoConnect = function () {
+            if (this.redirector != null) {
+                this.redirector.start(WebSocket);
+                this.keyboardHelper.GrabKeyInput();
+            }
+        };
+        KvmComponent.prototype.checkPowerStatus = function () {
+            return this.powerState.powerstate === 2;
         };
         KvmComponent.prototype.ngDoCheck = function () {
             if (this.selectedAction !== this.previousAction) {
@@ -81,7 +215,7 @@
         };
         return KvmComponent;
     }());
-    KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(); };
+    KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(i0.ɵɵdirectiveInject(KvmService)); };
     KvmComponent.ɵcmp = i0.ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt-kvm"]], viewQuery: function KvmComponent_Query(rf, ctx) {
             if (rf & 1) {
                 i0.ɵɵviewQuery(_c0, 1);
@@ -114,7 +248,7 @@
                         templateUrl: './kvm.component.html',
                         styles: [],
                     }]
-            }], function () { return []; }, { canvas: [{
+            }], function () { return [{ type: KvmService }]; }, { canvas: [{
                     type: i0.ViewChild,
                     args: ['canvas', { static: false }]
                 }], width: [{
@@ -167,16 +301,17 @@
     }());
     KvmModule.ɵfac = function KvmModule_Factory(t) { return new (t || KvmModule)(); };
     KvmModule.ɵmod = i0.ɵɵdefineNgModule({ type: KvmModule });
-    KvmModule.ɵinj = i0.ɵɵdefineInjector({ imports: [[]] });
-    (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(KvmModule, { declarations: [KvmComponent, DeviceToolbarComponent], exports: [KvmComponent] }); })();
+    KvmModule.ɵinj = i0.ɵɵdefineInjector({ providers: [], imports: [[i1.HttpClientModule, platformBrowser.BrowserModule]] });
+    (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(KvmModule, { declarations: [KvmComponent, DeviceToolbarComponent], imports: [i1.HttpClientModule, platformBrowser.BrowserModule], exports: [KvmComponent] }); })();
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(KvmModule, [{
                 type: i0.NgModule,
                 args: [{
                         declarations: [KvmComponent, DeviceToolbarComponent],
-                        imports: [],
+                        imports: [i1.HttpClientModule, platformBrowser.BrowserModule],
                         exports: [KvmComponent],
-                        schemas: [i0.CUSTOM_ELEMENTS_SCHEMA]
+                        schemas: [i0.CUSTOM_ELEMENTS_SCHEMA],
+                        providers: [],
                     }]
             }], null, null);
     })();
