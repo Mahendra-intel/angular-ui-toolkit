@@ -3,12 +3,10 @@ import { IDataProcessor, ILogger, KeyBoardHelper, MouseHelper } from '@open-amt-
 import { KvmService } from './kvm.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from './auth.service';
-import { ActivatedRoute } from '@angular/router';
 import * as i0 from "@angular/core";
 export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly authService;
     private readonly devicesService;
-    readonly activatedRoute: ActivatedRoute;
     canvas: ElementRef | undefined;
     context: CanvasRenderingContext2D;
     width: number;
@@ -38,7 +36,7 @@ export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
         value: number;
         viewValue: string;
     }[];
-    constructor(authService: AuthService, devicesService: KvmService, activatedRoute: ActivatedRoute);
+    constructor(authService: AuthService, devicesService: KvmService);
     ngOnInit(): void;
     ngAfterViewInit(): void;
     instantiate(): void;

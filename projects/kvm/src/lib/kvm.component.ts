@@ -30,7 +30,7 @@ import { catchError, finalize, mergeMap, throttleTime } from 'rxjs/operators';
 // import { PowerUpAlertComponent } from './shared/power-up-alert/power-up-alert.component';
 // import SnackbarDefaults from './shared/config/snackBarDefault';
 import { AuthService } from './auth.service'
-import { ActivatedRoute } from '@angular/router';
+// import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'amt-kvm',
@@ -77,7 +77,7 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
     // public dialog: MatDialog,
     private readonly authService: AuthService,
     private readonly devicesService: KvmService,
-    public readonly activatedRoute: ActivatedRoute
+    // public readonly activatedRoute: ActivatedRoute
   ) {
     if (environment.mpsServer.includes('/mps')) {
       //handles kong route
@@ -87,10 +87,10 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.logger = new ConsoleLogger(1);
-    this.activatedRoute.params.subscribe((params) => {
-      this.isLoading = true;
-      this.deviceId = params.id;
-    });
+    // this.activatedRoute.params.subscribe((params) => {
+    //   this.isLoading = true;
+    //   this.deviceId = params.id;
+    // });
     this.stopSocketSubscription = this.devicesService.stopwebSocket.subscribe(
       () => {
         this.stopKvm();

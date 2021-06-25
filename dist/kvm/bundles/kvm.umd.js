@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/operators'), require('@angular/common/http'), require('@open-amt-cloud-toolkit/ui-toolkit/core'), require('rxjs'), require('@angular/router'), require('@angular/platform-browser')) :
-    typeof define === 'function' && define.amd ? define('kvm', ['exports', '@angular/core', 'rxjs/operators', '@angular/common/http', '@open-amt-cloud-toolkit/ui-toolkit/core', 'rxjs', '@angular/router', '@angular/platform-browser'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.kvm = {}, global.ng.core, global.rxjs.operators, global.ng.common.http, global['@open-amt-cloud-toolkit']['ui-toolkit'].core, global.rxjs, global.ng.router, global.ng.platformBrowser));
-}(this, (function (exports, i0, operators, i1, core, rxjs, i3, platformBrowser) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/operators'), require('@angular/common/http'), require('@open-amt-cloud-toolkit/ui-toolkit/core'), require('rxjs'), require('@angular/platform-browser')) :
+    typeof define === 'function' && define.amd ? define('kvm', ['exports', '@angular/core', 'rxjs/operators', '@angular/common/http', '@open-amt-cloud-toolkit/ui-toolkit/core', 'rxjs', '@angular/platform-browser'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.kvm = {}, global.ng.core, global.rxjs.operators, global.ng.common.http, global['@open-amt-cloud-toolkit']['ui-toolkit'].core, global.rxjs, global.ng.platformBrowser));
+}(this, (function (exports, i0, operators, i1, core, rxjs, platformBrowser) { 'use strict';
 
     var environment = {
         production: false,
@@ -96,15 +96,15 @@
     })();
 
     var _c0 = ["canvas"];
+    // import { ActivatedRoute } from '@angular/router';
     var KvmComponent = /** @class */ (function () {
         function KvmComponent(
         // public snackBar: MatSnackBar,
         // public dialog: MatDialog,
-        authService, devicesService, activatedRoute) {
+        authService, devicesService) {
             var _this = this;
             this.authService = authService;
             this.devicesService = devicesService;
-            this.activatedRoute = activatedRoute;
             // //setting a width and height for the canvas
             this.width = 400;
             this.height = 400;
@@ -149,10 +149,10 @@
         KvmComponent.prototype.ngOnInit = function () {
             var _this = this;
             this.logger = new core.ConsoleLogger(1);
-            this.activatedRoute.params.subscribe(function (params) {
-                _this.isLoading = true;
-                _this.deviceId = params.id;
-            });
+            // this.activatedRoute.params.subscribe((params) => {
+            //   this.isLoading = true;
+            //   this.deviceId = params.id;
+            // });
             this.stopSocketSubscription = this.devicesService.stopwebSocket.subscribe(function () {
                 _this.stopKvm();
             });
@@ -292,7 +292,7 @@
         };
         return KvmComponent;
     }());
-    KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(i0.ɵɵdirectiveInject(AuthService), i0.ɵɵdirectiveInject(KvmService), i0.ɵɵdirectiveInject(i3.ActivatedRoute)); };
+    KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(i0.ɵɵdirectiveInject(AuthService), i0.ɵɵdirectiveInject(KvmService)); };
     KvmComponent.ɵcmp = i0.ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt-kvm"]], viewQuery: function KvmComponent_Query(rf, ctx) {
             if (rf & 1) {
                 i0.ɵɵviewQuery(_c0, 1);
@@ -325,7 +325,7 @@
                         templateUrl: './kvm.component.html',
                         styles: [],
                     }]
-            }], function () { return [{ type: AuthService }, { type: KvmService }, { type: i3.ActivatedRoute }]; }, { canvas: [{
+            }], function () { return [{ type: AuthService }, { type: KvmService }]; }, { canvas: [{
                     type: i0.ViewChild,
                     args: ['canvas', { static: false }]
                 }], width: [{

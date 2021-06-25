@@ -3,7 +3,6 @@ import { catchError, mergeMap, throttleTime, finalize } from 'rxjs/operators';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ConsoleLogger, AMTKvmDataRedirector, Protocol, AMTDesktop, DataProcessor, MouseHelper, KeyBoardHelper } from '@open-amt-cloud-toolkit/ui-toolkit/core';
 import { interval, fromEvent, of, timer } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 
 const environment = {
@@ -91,14 +90,14 @@ AuthService.ɵprov = ɵɵdefineInjectable({ token: AuthService, factory: AuthSer
     }], function () { return [{ type: HttpClient }]; }, null); })();
 
 const _c0 = ["canvas"];
+// import { ActivatedRoute } from '@angular/router';
 class KvmComponent {
     constructor(
     // public snackBar: MatSnackBar,
     // public dialog: MatDialog,
-    authService, devicesService, activatedRoute) {
+    authService, devicesService) {
         this.authService = authService;
         this.devicesService = devicesService;
-        this.activatedRoute = activatedRoute;
         // //setting a width and height for the canvas
         this.width = 400;
         this.height = 400;
@@ -142,10 +141,10 @@ class KvmComponent {
     }
     ngOnInit() {
         this.logger = new ConsoleLogger(1);
-        this.activatedRoute.params.subscribe((params) => {
-            this.isLoading = true;
-            this.deviceId = params.id;
-        });
+        // this.activatedRoute.params.subscribe((params) => {
+        //   this.isLoading = true;
+        //   this.deviceId = params.id;
+        // });
         this.stopSocketSubscription = this.devicesService.stopwebSocket.subscribe(() => {
             this.stopKvm();
         });
@@ -280,7 +279,7 @@ class KvmComponent {
         }
     }
 }
-KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(ɵɵdirectiveInject(AuthService), ɵɵdirectiveInject(KvmService), ɵɵdirectiveInject(ActivatedRoute)); };
+KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(ɵɵdirectiveInject(AuthService), ɵɵdirectiveInject(KvmService)); };
 KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt-kvm"]], viewQuery: function KvmComponent_Query(rf, ctx) { if (rf & 1) {
         ɵɵviewQuery(_c0, 1);
     } if (rf & 2) {
@@ -306,7 +305,7 @@ KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt
                 templateUrl: './kvm.component.html',
                 styles: [],
             }]
-    }], function () { return [{ type: AuthService }, { type: KvmService }, { type: ActivatedRoute }]; }, { canvas: [{
+    }], function () { return [{ type: AuthService }, { type: KvmService }]; }, { canvas: [{
             type: ViewChild,
             args: ['canvas', { static: false }]
         }], width: [{
