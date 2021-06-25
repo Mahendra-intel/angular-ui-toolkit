@@ -25,14 +25,19 @@ import { environment } from '../environments/environment';
 import { KvmService } from './kvm.service';
 import { fromEvent, interval, of, Subscription, timer } from 'rxjs';
 import { catchError, finalize, mergeMap, throttleTime } from 'rxjs/operators';
-// import { AuthService } from './auth.service'
+// import { MatDialog } from '@angular/material/dialog';
+// import { MatSnackBar } from '@angular/material/snack-bar';
+// import { PowerUpAlertComponent } from './shared/power-up-alert/power-up-alert.component';
+// import SnackbarDefaults from './shared/config/snackBarDefault';
+import { AuthService } from './auth.service'
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'amt-kvm',
   templateUrl: './kvm.component.html',
   styles: [],
 })
-export class KvmComponent implements OnInit, AfterViewInit {
+export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: false }) canvas: ElementRef | undefined;
   public context!: CanvasRenderingContext2D;
 
@@ -68,8 +73,11 @@ export class KvmComponent implements OnInit, AfterViewInit {
   ];
 
   constructor(
+    // public snackBar: MatSnackBar,
+    // public dialog: MatDialog,
+    private readonly authService: AuthService,
     private readonly devicesService: KvmService,
-    // public readonly activatedRoute: ActivatedRoute
+    public readonly activatedRoute: ActivatedRoute
   ) {
     if (environment.mpsServer.includes('/mps')) {
       //handles kong route
@@ -79,10 +87,10 @@ export class KvmComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.logger = new ConsoleLogger(1);
-    // this.activatedRoute.params.subscribe((params) => {
-    //   this.isLoading = true;
-    //   this.deviceId = params.id;
-    // });
+    this.activatedRoute.params.subscribe((params) => {
+      this.isLoading = true;
+      this.deviceId = params.id;
+    });
     this.stopSocketSubscription = this.devicesService.stopwebSocket.subscribe(
       () => {
         this.stopKvm();
@@ -113,7 +121,7 @@ export class KvmComponent implements OnInit, AfterViewInit {
       '',
       0,
       0,
-      // this.authService.getLoggedUserToken(),
+      this.authService.getLoggedUserToken(),
       this.server
     );
     this.module = new AMTDesktop(this.logger as any, this.context);
@@ -158,7 +166,7 @@ export class KvmComponent implements OnInit, AfterViewInit {
       .getPowerState(this.deviceId)
       .pipe(
         catchError(() => {
-          // this.snackBar.open($localize`Error retrieving power status`, undefined, SnackbarDefaults.defaultError)
+          // this.snackBar.open(`Error retrieving power status`, undefined, SnackbarDefaults.defaultError)
           return of();
         }),
         finalize(() => {})
@@ -168,24 +176,27 @@ export class KvmComponent implements OnInit, AfterViewInit {
         this.isPoweredOn = this.checkPowerStatus();
         if (!this.isPoweredOn) {
           this.isLoading = false;
-          // const dialog = this.dialog.open(PowerUpAlertComponent)
-          // dialog.afterClosed().subscribe(result => {
+          // const dialog = this.dialog.open(PowerUpAlertComponent);
+          // dialog.afterClosed().subscribe((result) => {
           //   if (result) {
-          //     this.isLoading = true
-          //     this.devicesService.sendPowerAction(this.deviceId, 2).pipe().subscribe(data => {
-          //       this.instantiate()
-          //       setTimeout(() => {
-          //         this.isLoading = false
-          //         this.autoConnect()
-          //       }, 4000)
-          //     })
+          //     this.isLoading = true;
+          //     this.devicesService
+          //       .sendPowerAction(this.deviceId, 2)
+          //       .pipe()
+          //       .subscribe((data) => {
+          //         this.instantiate();
+          //         setTimeout(() => {
+          //           this.isLoading = false;
+          //           this.autoConnect();
+          //         }, 4000);
+          //       });
           //   }
-          // })
+          // });
         } else {
           this.instantiate();
           setTimeout(() => {
             this.isLoading = false;
-            this.autoConnect()
+            this.autoConnect();
           }, 0);
         }
       });
@@ -198,7 +209,7 @@ export class KvmComponent implements OnInit, AfterViewInit {
       .setAmtFeatures(this.deviceId)
       .pipe(
         catchError(() => {
-          // this.snackBar.open($localize`Error enabling kvm`, undefined, SnackbarDefaults.defaultError)
+          // this.snackBar.open(`Error enabling kvm`, undefined, SnackbarDefaults.defaultError)
           this.init();
           return of();
         }),
@@ -207,11 +218,19 @@ export class KvmComponent implements OnInit, AfterViewInit {
       .subscribe(() => this.init());
   }
 
-  autoConnect (): void {
+  autoConnect(): void {
     if (this.redirector != null) {
-      this.redirector.start(WebSocket)
-      this.keyboardHelper.GrabKeyInput()
+      this.redirector.start(WebSocket);
+      this.keyboardHelper.GrabKeyInput();
     }
+  }
+
+  
+  onEncodingChange (): void {
+    this.stopKvm()
+    timer(1000).subscribe(() => {
+      this.autoConnect()
+    })
   }
 
   checkPowerStatus(): boolean {
@@ -248,6 +267,19 @@ export class KvmComponent implements OnInit, AfterViewInit {
   onMousedown(event: MouseEvent): void {
     if (this.mouseHelper != null) {
       this.mouseHelper.mousedown(event);
+    }
+  }
+
+  ngOnDestroy (): void {
+    if (this.timeInterval) {
+      this.timeInterval.unsubscribe()
+    }
+    this.stopKvm()
+    if (this.startSocketSubscription) {
+      this.startSocketSubscription.unsubscribe()
+    }
+    if (this.stopSocketSubscription) {
+      this.stopSocketSubscription.unsubscribe()
     }
   }
 }

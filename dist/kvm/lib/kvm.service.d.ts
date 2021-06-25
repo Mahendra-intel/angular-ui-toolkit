@@ -10,6 +10,7 @@ export declare class KvmService {
     constructor(http: HttpClient);
     setAmtFeatures(deviceId: string): Observable<AmtFeaturesResponse>;
     getPowerState(deviceId: string): Observable<PowerState>;
+    sendPowerAction(deviceId: string, action: number, useSOL?: boolean): Observable<any>;
     static ɵfac: i0.ɵɵFactoryDef<KvmService, never>;
     static ɵprov: i0.ɵɵInjectableDef<KvmService>;
 }

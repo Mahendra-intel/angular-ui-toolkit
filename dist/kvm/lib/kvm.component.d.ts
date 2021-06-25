@@ -1,10 +1,14 @@
-import { AfterViewInit, ElementRef, EventEmitter, OnInit } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { IDataProcessor, ILogger, KeyBoardHelper, MouseHelper } from '@open-amt-cloud-toolkit/ui-toolkit/core';
 import { KvmService } from './kvm.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from './auth.service';
+import { ActivatedRoute } from '@angular/router';
 import * as i0 from "@angular/core";
-export declare class KvmComponent implements OnInit, AfterViewInit {
+export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
+    private readonly authService;
     private readonly devicesService;
+    readonly activatedRoute: ActivatedRoute;
     canvas: ElementRef | undefined;
     context: CanvasRenderingContext2D;
     width: number;
@@ -34,7 +38,7 @@ export declare class KvmComponent implements OnInit, AfterViewInit {
         value: number;
         viewValue: string;
     }[];
-    constructor(devicesService: KvmService);
+    constructor(authService: AuthService, devicesService: KvmService, activatedRoute: ActivatedRoute);
     ngOnInit(): void;
     ngAfterViewInit(): void;
     instantiate(): void;
@@ -43,12 +47,14 @@ export declare class KvmComponent implements OnInit, AfterViewInit {
     init(): void;
     setAmtFeatures(): void;
     autoConnect(): void;
+    onEncodingChange(): void;
     checkPowerStatus(): boolean;
     reset: () => void;
     stopKvm: () => void;
     ngDoCheck(): void;
     onMouseup(event: MouseEvent): void;
     onMousedown(event: MouseEvent): void;
+    ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDef<KvmComponent, never>;
     static ɵcmp: i0.ɵɵComponentDefWithMeta<KvmComponent, "amt-kvm", never, { "width": "width"; "height": "height"; }, { "deviceState": "deviceState"; "deviceStatus": "deviceStatus"; }, never, never>;
 }
