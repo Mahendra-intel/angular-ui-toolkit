@@ -25,11 +25,12 @@ import { environment } from '../environments/environment';
 import { KvmService } from './kvm.service';
 import { fromEvent, interval, of, Subscription, timer } from 'rxjs';
 import { catchError, finalize, mergeMap, throttleTime } from 'rxjs/operators';
-// import { MatDialog } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 // import { MatSnackBar } from '@angular/material/snack-bar';
 // import { PowerUpAlertComponent } from './shared/power-up-alert/power-up-alert.component';
 // import SnackbarDefaults from './shared/config/snackBarDefault';
 import { AuthService } from './auth.service'
+import { PowerUpAlertComponent } from './shared/power-up-alert/power-up-alert.component';
 // import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -74,7 +75,7 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     // public snackBar: MatSnackBar,
-    // public dialog: MatDialog,
+    public dialog: MatDialog,
     private readonly authService: AuthService,
     private readonly devicesService: KvmService,
     // public readonly activatedRoute: ActivatedRoute
@@ -176,22 +177,22 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isPoweredOn = this.checkPowerStatus();
         if (!this.isPoweredOn) {
           this.isLoading = false;
-          // const dialog = this.dialog.open(PowerUpAlertComponent);
-          // dialog.afterClosed().subscribe((result) => {
-          //   if (result) {
-          //     this.isLoading = true;
-          //     this.devicesService
-          //       .sendPowerAction(this.deviceId, 2)
-          //       .pipe()
-          //       .subscribe((data) => {
-          //         this.instantiate();
-          //         setTimeout(() => {
-          //           this.isLoading = false;
-          //           this.autoConnect();
-          //         }, 4000);
-          //       });
-          //   }
-          // });
+          const dialog = this.dialog.open(PowerUpAlertComponent);
+          dialog.afterClosed().subscribe((result) => {
+            if (result) {
+              this.isLoading = true;
+              this.devicesService
+                .sendPowerAction(this.deviceId, 2)
+                .pipe()
+                .subscribe((data) => {
+                  this.instantiate();
+                  setTimeout(() => {
+                    this.isLoading = false;
+                    this.autoConnect();
+                  }, 4000);
+                });
+            }
+          });
         } else {
           this.instantiate();
           setTimeout(() => {

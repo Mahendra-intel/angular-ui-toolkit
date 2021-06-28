@@ -5,10 +5,11 @@ import { DeviceToolbarComponent } from './app/device-toolbar/device-toolbar.comp
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { KvmService } from './kvm.service';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [KvmComponent, DeviceToolbarComponent],
-  imports: [HttpClientModule, BrowserModule],
+  imports: [HttpClientModule, BrowserModule,SharedModule.forRoot()],
   exports: [KvmComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthService, KvmService],

@@ -1,9 +1,44 @@
-import { EventEmitter, ɵɵinject, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdirectiveInject, ɵɵdefineComponent, ɵɵviewQuery, ɵɵqueryRefresh, ɵɵloadQuery, ɵɵelementStart, ɵɵtext, ɵɵelementEnd, ɵɵlistener, ɵɵadvance, ɵɵproperty, Component, ViewChild, Input, Output, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { EventEmitter, ɵɵinject, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdefineComponent, Component, ɵɵdirectiveInject, ɵɵviewQuery, ɵɵqueryRefresh, ɵɵloadQuery, ɵɵelementStart, ɵɵtext, ɵɵelementEnd, ɵɵlistener, ɵɵadvance, ɵɵproperty, ViewChild, Input, Output, Inject, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { catchError, mergeMap, throttleTime, finalize } from 'rxjs/operators';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ConsoleLogger, AMTKvmDataRedirector, Protocol, AMTDesktop, DataProcessor, MouseHelper, KeyBoardHelper } from '@open-amt-cloud-toolkit/ui-toolkit/core';
 import { interval, fromEvent, of, timer } from 'rxjs';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { CdkTableModule } from '@angular/cdk/table';
 
 const environment = {
     production: false,
@@ -59,6 +94,22 @@ KvmService.ɵprov = ɵɵdefineInjectable({ token: KvmService, factory: KvmServic
             }]
     }], function () { return [{ type: HttpClient }]; }, null); })();
 
+class PowerUpAlertComponent {
+    constructor() { }
+    ngOnInit() {
+    }
+}
+PowerUpAlertComponent.ɵfac = function PowerUpAlertComponent_Factory(t) { return new (t || PowerUpAlertComponent)(); };
+PowerUpAlertComponent.ɵcmp = ɵɵdefineComponent({ type: PowerUpAlertComponent, selectors: [["amt-power-up-alert"]], decls: 0, vars: 0, template: function PowerUpAlertComponent_Template(rf, ctx) { }, styles: [""] });
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(PowerUpAlertComponent, [{
+        type: Component,
+        args: [{
+                selector: 'amt-power-up-alert',
+                templateUrl: './power-up-alert.component.html',
+                styleUrls: ['./power-up-alert.component.scss']
+            }]
+    }], function () { return []; }, null); })();
+
 class AuthService {
     constructor(http) {
         this.http = http;
@@ -94,8 +145,8 @@ const _c0 = ["canvas"];
 class KvmComponent {
     constructor(
     // public snackBar: MatSnackBar,
-    // public dialog: MatDialog,
-    authService, devicesService) {
+    dialog, authService, devicesService) {
+        this.dialog = dialog;
         this.authService = authService;
         this.devicesService = devicesService;
         // //setting a width and height for the canvas
@@ -198,22 +249,22 @@ class KvmComponent {
             this.isPoweredOn = this.checkPowerStatus();
             if (!this.isPoweredOn) {
                 this.isLoading = false;
-                // const dialog = this.dialog.open(PowerUpAlertComponent);
-                // dialog.afterClosed().subscribe((result) => {
-                //   if (result) {
-                //     this.isLoading = true;
-                //     this.devicesService
-                //       .sendPowerAction(this.deviceId, 2)
-                //       .pipe()
-                //       .subscribe((data) => {
-                //         this.instantiate();
-                //         setTimeout(() => {
-                //           this.isLoading = false;
-                //           this.autoConnect();
-                //         }, 4000);
-                //       });
-                //   }
-                // });
+                const dialog = this.dialog.open(PowerUpAlertComponent);
+                dialog.afterClosed().subscribe((result) => {
+                    if (result) {
+                        this.isLoading = true;
+                        this.devicesService
+                            .sendPowerAction(this.deviceId, 2)
+                            .pipe()
+                            .subscribe((data) => {
+                            this.instantiate();
+                            setTimeout(() => {
+                                this.isLoading = false;
+                                this.autoConnect();
+                            }, 4000);
+                        });
+                    }
+                });
             }
             else {
                 this.instantiate();
@@ -279,7 +330,7 @@ class KvmComponent {
         }
     }
 }
-KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(ɵɵdirectiveInject(AuthService), ɵɵdirectiveInject(KvmService)); };
+KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(ɵɵdirectiveInject(MatDialog), ɵɵdirectiveInject(AuthService), ɵɵdirectiveInject(KvmService)); };
 KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt-kvm"]], viewQuery: function KvmComponent_Query(rf, ctx) { if (rf & 1) {
         ɵɵviewQuery(_c0, 1);
     } if (rf & 2) {
@@ -305,7 +356,7 @@ KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt
                 templateUrl: './kvm.component.html',
                 styles: [],
             }]
-    }], function () { return [{ type: AuthService }, { type: KvmService }]; }, { canvas: [{
+    }], function () { return [{ type: MatDialog }, { type: AuthService }, { type: KvmService }]; }, { canvas: [{
             type: ViewChild,
             args: ['canvas', { static: false }]
         }], width: [{
@@ -344,17 +395,311 @@ DeviceToolbarComponent.ɵcmp = ɵɵdefineComponent({ type: DeviceToolbarComponen
             }]
     }], function () { return []; }, null); })();
 
+class AreYouSureDialogComponent {
+    constructor() { }
+    ngOnInit() {
+    }
+}
+AreYouSureDialogComponent.ɵfac = function AreYouSureDialogComponent_Factory(t) { return new (t || AreYouSureDialogComponent)(); };
+AreYouSureDialogComponent.ɵcmp = ɵɵdefineComponent({ type: AreYouSureDialogComponent, selectors: [["amt-are-you-sure"]], decls: 0, vars: 0, template: function AreYouSureDialogComponent_Template(rf, ctx) { }, styles: [""] });
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(AreYouSureDialogComponent, [{
+        type: Component,
+        args: [{
+                selector: 'amt-are-you-sure',
+                templateUrl: './are-you-sure.component.html',
+                styleUrls: ['./are-you-sure.component.scss']
+            }]
+    }], function () { return []; }, null); })();
+
+class DialogContentComponent {
+    constructor(data) {
+        this.data = data;
+    }
+    ngOnInit() { }
+}
+DialogContentComponent.ɵfac = function DialogContentComponent_Factory(t) { return new (t || DialogContentComponent)(ɵɵdirectiveInject(MAT_DIALOG_DATA)); };
+DialogContentComponent.ɵcmp = ɵɵdefineComponent({ type: DialogContentComponent, selectors: [["amt-dialog-content"]], decls: 0, vars: 0, template: function DialogContentComponent_Template(rf, ctx) { }, styles: [""] });
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(DialogContentComponent, [{
+        type: Component,
+        args: [{
+                selector: 'amt-dialog-content',
+                templateUrl: './dialog-content.component.html',
+                styleUrls: ['./dialog-content.component.scss'],
+            }]
+    }], function () { return [{ type: undefined, decorators: [{
+                type: Inject,
+                args: [MAT_DIALOG_DATA]
+            }] }]; }, null); })();
+
+/*********************************************************************
+* Copyright (c) Intel Corporation 2021
+* SPDX-License-Identifier: Apache-2.0
+**********************************************************************/
+// import { HttpClientModule } from '@angular/common/http'
+class OpenAMTMaterialModule {
+}
+OpenAMTMaterialModule.ɵfac = function OpenAMTMaterialModule_Factory(t) { return new (t || OpenAMTMaterialModule)(); };
+OpenAMTMaterialModule.ɵmod = ɵɵdefineNgModule({ type: OpenAMTMaterialModule });
+OpenAMTMaterialModule.ɵinj = ɵɵdefineInjector({ providers: [
+        { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 30000, panelClass: ['success', 'mat-elevation-z12'] } }
+    ], imports: [[
+            FlexLayoutModule,
+            ReactiveFormsModule,
+            FormsModule,
+            MatNativeDateModule,
+            MatTableModule,
+            MatTreeModule,
+            MatMenuModule,
+            CdkTableModule,
+            MatButtonToggleModule,
+            MatRadioModule,
+            MatSortModule,
+            MatCheckboxModule,
+            MatTooltipModule,
+            MatSnackBarModule,
+            MatExpansionModule,
+            MatGridListModule,
+            MatChipsModule,
+            MatSelectModule,
+            MatListModule,
+            MatCardModule,
+            MatAutocompleteModule,
+            MatStepperModule,
+            MatDialogModule,
+            MatSidenavModule,
+            MatInputModule,
+            MatSlideToggleModule,
+            MatDatepickerModule,
+            MatProgressBarModule,
+            MatProgressSpinnerModule,
+            MatToolbarModule,
+            MatIconModule,
+            MatTabsModule,
+            MatFormFieldModule,
+            MatButtonModule,
+            MatPaginatorModule
+        ], FlexLayoutModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatAutocompleteModule,
+        MatDatepickerModule,
+        MatTableModule,
+        MatTreeModule,
+        MatIconModule,
+        MatSortModule,
+        MatButtonToggleModule,
+        MatTooltipModule,
+        MatGridListModule,
+        MatRadioModule,
+        MatCheckboxModule,
+        MatExpansionModule,
+        MatMenuModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        MatListModule,
+        MatStepperModule,
+        MatChipsModule,
+        MatCardModule,
+        MatSelectModule,
+        MatInputModule,
+        MatToolbarModule,
+        MatTabsModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatProgressBarModule, MatProgressSpinnerModule,
+        MatSlideToggleModule,
+        MatSidenavModule,
+        MatPaginatorModule,
+        CdkTableModule,
+        MatNativeDateModule] });
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(OpenAMTMaterialModule, { declarations: [AreYouSureDialogComponent, PowerUpAlertComponent, DialogContentComponent], imports: [FlexLayoutModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatNativeDateModule,
+        MatTableModule,
+        MatTreeModule,
+        MatMenuModule,
+        CdkTableModule,
+        MatButtonToggleModule,
+        MatRadioModule,
+        MatSortModule,
+        MatCheckboxModule,
+        MatTooltipModule,
+        MatSnackBarModule,
+        MatExpansionModule,
+        MatGridListModule,
+        MatChipsModule,
+        MatSelectModule,
+        MatListModule,
+        MatCardModule,
+        MatAutocompleteModule,
+        MatStepperModule,
+        MatDialogModule,
+        MatSidenavModule,
+        MatInputModule,
+        MatSlideToggleModule,
+        MatDatepickerModule,
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatTabsModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatPaginatorModule], exports: [FlexLayoutModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatAutocompleteModule,
+        MatDatepickerModule,
+        MatTableModule,
+        MatTreeModule,
+        MatIconModule,
+        MatSortModule,
+        MatButtonToggleModule,
+        MatTooltipModule,
+        MatGridListModule,
+        MatRadioModule,
+        MatCheckboxModule,
+        MatExpansionModule,
+        MatMenuModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        MatListModule,
+        MatStepperModule,
+        MatChipsModule,
+        MatCardModule,
+        MatSelectModule,
+        MatInputModule,
+        MatToolbarModule,
+        MatTabsModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatProgressBarModule, MatProgressSpinnerModule,
+        MatSlideToggleModule,
+        MatSidenavModule,
+        MatPaginatorModule,
+        CdkTableModule,
+        MatNativeDateModule] }); })();
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(OpenAMTMaterialModule, [{
+        type: NgModule,
+        args: [{
+                imports: [
+                    FlexLayoutModule,
+                    ReactiveFormsModule,
+                    FormsModule,
+                    MatNativeDateModule,
+                    MatTableModule,
+                    MatTreeModule,
+                    MatMenuModule,
+                    CdkTableModule,
+                    MatButtonToggleModule,
+                    MatRadioModule,
+                    MatSortModule,
+                    MatCheckboxModule,
+                    MatTooltipModule,
+                    MatSnackBarModule,
+                    MatExpansionModule,
+                    MatGridListModule,
+                    MatChipsModule,
+                    MatSelectModule,
+                    MatListModule,
+                    MatCardModule,
+                    MatAutocompleteModule,
+                    MatStepperModule,
+                    MatDialogModule,
+                    MatSidenavModule,
+                    MatInputModule,
+                    MatSlideToggleModule,
+                    MatDatepickerModule,
+                    MatProgressBarModule,
+                    MatProgressSpinnerModule,
+                    MatToolbarModule,
+                    MatIconModule,
+                    MatTabsModule,
+                    MatFormFieldModule,
+                    MatButtonModule,
+                    MatPaginatorModule
+                ],
+                exports: [
+                    FlexLayoutModule,
+                    ReactiveFormsModule,
+                    FormsModule,
+                    MatAutocompleteModule,
+                    MatDatepickerModule,
+                    MatTableModule,
+                    MatTreeModule,
+                    MatIconModule,
+                    MatSortModule,
+                    MatButtonToggleModule,
+                    MatTooltipModule,
+                    MatGridListModule,
+                    MatRadioModule,
+                    MatCheckboxModule,
+                    MatExpansionModule,
+                    MatMenuModule,
+                    MatDialogModule,
+                    MatSnackBarModule,
+                    MatListModule,
+                    MatStepperModule,
+                    MatChipsModule,
+                    MatCardModule,
+                    MatSelectModule,
+                    MatInputModule,
+                    MatToolbarModule,
+                    MatTabsModule,
+                    MatFormFieldModule,
+                    MatButtonModule,
+                    MatProgressBarModule, MatProgressSpinnerModule,
+                    MatSlideToggleModule,
+                    MatSidenavModule,
+                    MatPaginatorModule,
+                    CdkTableModule,
+                    MatNativeDateModule
+                ],
+                providers: [
+                    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 30000, panelClass: ['success', 'mat-elevation-z12'] } }
+                ],
+                declarations: [AreYouSureDialogComponent, PowerUpAlertComponent, DialogContentComponent]
+            }]
+    }], null, null); })();
+class SharedModule {
+    static forRoot() {
+        return {
+            ngModule: SharedModule,
+            providers: []
+        };
+    }
+}
+SharedModule.ɵfac = function SharedModule_Factory(t) { return new (t || SharedModule)(); };
+SharedModule.ɵmod = ɵɵdefineNgModule({ type: SharedModule });
+SharedModule.ɵinj = ɵɵdefineInjector({ imports: [[
+            CommonModule,
+            OpenAMTMaterialModule
+        ], OpenAMTMaterialModule] });
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(SharedModule, { imports: [CommonModule, OpenAMTMaterialModule], exports: [OpenAMTMaterialModule] }); })();
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(SharedModule, [{
+        type: NgModule,
+        args: [{
+                declarations: [],
+                exports: [OpenAMTMaterialModule],
+                imports: [
+                    CommonModule,
+                    OpenAMTMaterialModule
+                ]
+            }]
+    }], null, null); })();
+
 class KvmModule {
 }
 KvmModule.ɵfac = function KvmModule_Factory(t) { return new (t || KvmModule)(); };
 KvmModule.ɵmod = ɵɵdefineNgModule({ type: KvmModule });
-KvmModule.ɵinj = ɵɵdefineInjector({ providers: [AuthService, KvmService], imports: [[HttpClientModule, BrowserModule]] });
-(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(KvmModule, { declarations: [KvmComponent, DeviceToolbarComponent], imports: [HttpClientModule, BrowserModule], exports: [KvmComponent] }); })();
+KvmModule.ɵinj = ɵɵdefineInjector({ providers: [AuthService, KvmService], imports: [[HttpClientModule, BrowserModule, SharedModule.forRoot()]] });
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(KvmModule, { declarations: [KvmComponent, DeviceToolbarComponent], imports: [HttpClientModule, BrowserModule, SharedModule], exports: [KvmComponent] }); })();
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(KvmModule, [{
         type: NgModule,
         args: [{
                 declarations: [KvmComponent, DeviceToolbarComponent],
-                imports: [HttpClientModule, BrowserModule],
+                imports: [HttpClientModule, BrowserModule, SharedModule.forRoot()],
                 exports: [KvmComponent],
                 schemas: [CUSTOM_ELEMENTS_SCHEMA],
                 providers: [AuthService, KvmService],

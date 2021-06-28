@@ -2,9 +2,11 @@ import { AfterViewInit, ElementRef, EventEmitter, OnDestroy, OnInit } from '@ang
 import { IDataProcessor, ILogger, KeyBoardHelper, MouseHelper } from '@open-amt-cloud-toolkit/ui-toolkit/core';
 import { KvmService } from './kvm.service';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from './auth.service';
 import * as i0 from "@angular/core";
 export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
+    dialog: MatDialog;
     private readonly authService;
     private readonly devicesService;
     canvas: ElementRef | undefined;
@@ -36,7 +38,7 @@ export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
         value: number;
         viewValue: string;
     }[];
-    constructor(authService: AuthService, devicesService: KvmService);
+    constructor(dialog: MatDialog, authService: AuthService, devicesService: KvmService);
     ngOnInit(): void;
     ngAfterViewInit(): void;
     instantiate(): void;
