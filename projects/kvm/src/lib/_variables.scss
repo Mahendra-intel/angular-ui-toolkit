@@ -1,0 +1,7 @@
+@import '~@angular/material/theming'
+
+$openamtui-primary: mat-palette($mat-light-blue);
+$openamtui-accent: mat-palette($mat-blue-grey, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$openamtui-warn: mat-palette($mat-red);

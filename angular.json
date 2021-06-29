@@ -18,6 +18,11 @@
             "tsConfig": "projects/kvm/tsconfig.lib.json",
             "project": "projects/kvm/ng-package.json"
           },
+          "styles": [
+            "projects/kvm/src/lib/_variables.scss",
+            "projects/kvm/src/lib/styles.scss",
+            "projects/kvm/src/lib/open-amt-theme.scss"
+          ],
           "configurations": {
             "production": {
               "tsConfig": "projects/kvm/tsconfig.lib.prod.json"
@@ -39,128 +44,15 @@
               "projects/kvm/tsconfig.lib.json",
               "projects/kvm/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
-    },
-    "kvm-test-example": {
-      "projectType": "application",
-      "schematics": {},
-      "root": "projects/kvm-test-example",
-      "sourceRoot": "projects/kvm-test-example/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/kvm-test-example",
-            "index": "projects/kvm-test-example/src/index.html",
-            "main": "projects/kvm-test-example/src/main.ts",
-            "polyfills": "projects/kvm-test-example/src/polyfills.ts",
-            "tsConfig": "projects/kvm-test-example/tsconfig.app.json",
-            "aot": true,
-            "assets": [
-              "projects/kvm-test-example/src/favicon.ico",
-              "projects/kvm-test-example/src/assets"
-            ],
-            "styles": [
-              "projects/kvm-test-example/src/styles.css"
-            ],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/kvm-test-example/src/environments/environment.ts",
-                  "with": "projects/kvm-test-example/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "kvm-test-example:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "kvm-test-example:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "kvm-test-example:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/kvm-test-example/src/test.ts",
-            "polyfills": "projects/kvm-test-example/src/polyfills.ts",
-            "tsConfig": "projects/kvm-test-example/tsconfig.spec.json",
-            "karmaConfig": "projects/kvm-test-example/karma.conf.js",
-            "assets": [
-              "projects/kvm-test-example/src/favicon.ico",
-              "projects/kvm-test-example/src/assets"
-            ],
-            "styles": [
-              "projects/kvm-test-example/src/styles.css"
-            ],
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/kvm-test-example/tsconfig.app.json",
-              "projects/kvm-test-example/tsconfig.spec.json",
-              "projects/kvm-test-example/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/kvm-test-example/e2e/protractor.conf.js",
-            "devServerTarget": "kvm-test-example:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "kvm-test-example:serve:production"
-            }
-          }
-        }
-      }
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
     }
   },
   "defaultProject": "kvm"

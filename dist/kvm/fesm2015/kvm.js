@@ -1,17 +1,24 @@
-import { EventEmitter, ɵɵinject, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdefineComponent, Component, ɵɵdirectiveInject, ɵɵviewQuery, ɵɵqueryRefresh, ɵɵloadQuery, ɵɵelementStart, ɵɵtext, ɵɵelementEnd, ɵɵlistener, ɵɵadvance, ɵɵproperty, ViewChild, Input, Output, Inject, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { catchError, mergeMap, throttleTime, finalize } from 'rxjs/operators';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { EventEmitter, ɵɵinject, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdefineComponent, ɵɵelementStart, ɵɵtext, ɵɵelementEnd, ɵɵadvance, ɵɵproperty, Component, ɵɵtextInterpolate1, ɵɵdirectiveInject, ɵɵviewQuery, ɵɵqueryRefresh, ɵɵloadQuery, ɵɵlistener, ɵɵtemplate, Inject, ViewChild, Input, Output, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { catchError, mergeMap, throttleTime, finalize, tap } from 'rxjs/operators';
+import { HttpClient, HttpResponse, HttpErrorResponse, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ConsoleLogger, AMTKvmDataRedirector, Protocol, AMTDesktop, DataProcessor, MouseHelper, KeyBoardHelper } from '@open-amt-cloud-toolkit/ui-toolkit/core';
-import { interval, fromEvent, of, timer } from 'rxjs';
-import { MatDialog, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { interval, fromEvent, of, timer, throwError } from 'rxjs';
+import { MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatDialog, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatSnackBar, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
+import { MatFormField, MatLabel, MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { NgControlStatus, NgModel, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgForOf, CommonModule } from '@angular/common';
+import { MatOption, MatNativeDateModule } from '@angular/material/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -20,30 +27,24 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { CdkTableModule } from '@angular/cdk/table';
 
 const environment = {
     production: false,
-    mpsServer: 'https://localhost/mps',
-    rpsServer: 'https://localhost/rps'
+    mpsServer: 'https://52.172.14.137/mps',
+    rpsServer: 'https://52.172.14.137/rps'
 };
 
 class KvmService {
@@ -100,7 +101,25 @@ class PowerUpAlertComponent {
     }
 }
 PowerUpAlertComponent.ɵfac = function PowerUpAlertComponent_Factory(t) { return new (t || PowerUpAlertComponent)(); };
-PowerUpAlertComponent.ɵcmp = ɵɵdefineComponent({ type: PowerUpAlertComponent, selectors: [["amt-power-up-alert"]], decls: 0, vars: 0, template: function PowerUpAlertComponent_Template(rf, ctx) { }, styles: [""] });
+PowerUpAlertComponent.ɵcmp = ɵɵdefineComponent({ type: PowerUpAlertComponent, selectors: [["amt-power-up-alert"]], decls: 9, vars: 1, consts: [["mat-dialog-title", ""], [1, "mat-typography"], ["align", "end"], ["mat-button", "", "mat-dialog-close", ""], ["mat-button", "", "cdkFocusInitial", "", 3, "mat-dialog-close"]], template: function PowerUpAlertComponent_Template(rf, ctx) { if (rf & 1) {
+        ɵɵelementStart(0, "h2", 0);
+        ɵɵtext(1, "Your device is not powered on");
+        ɵɵelementEnd();
+        ɵɵelementStart(2, "mat-dialog-content", 1);
+        ɵɵtext(3, " Do you want to send a power up command to the device?\n");
+        ɵɵelementEnd();
+        ɵɵelementStart(4, "mat-dialog-actions", 2);
+        ɵɵelementStart(5, "button", 3);
+        ɵɵtext(6, "No");
+        ɵɵelementEnd();
+        ɵɵelementStart(7, "button", 4);
+        ɵɵtext(8, "Yes");
+        ɵɵelementEnd();
+        ɵɵelementEnd();
+    } if (rf & 2) {
+        ɵɵadvance(7);
+        ɵɵproperty("mat-dialog-close", true);
+    } }, directives: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose], styles: [""] });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(PowerUpAlertComponent, [{
         type: Component,
         args: [{
@@ -109,6 +128,24 @@ PowerUpAlertComponent.ɵcmp = ɵɵdefineComponent({ type: PowerUpAlertComponent,
                 styleUrls: ['./power-up-alert.component.scss']
             }]
     }], function () { return []; }, null); })();
+
+const SnackbarDefaults = {
+    defaultError: { duration: 3000, panelClass: ['error', 'mat-elevation-z12'] },
+    longError: { duration: 10000, panelClass: ['error', 'mat-elevation-z12'] },
+    quickError: { duration: 1000, panelClass: ['error', 'mat-elevation-z12'] },
+    defaultSuccess: {
+        duration: 3000,
+        panelClass: ['success', 'mat-elevation-z12'],
+    },
+    longSuccess: {
+        duration: 10000,
+        panelClass: ['success', 'mat-elevation-z12'],
+    },
+    quickSuccess: {
+        duration: 1000,
+        panelClass: ['success', 'mat-elevation-z12'],
+    },
+};
 
 class AuthService {
     constructor(http) {
@@ -141,14 +178,24 @@ AuthService.ɵprov = ɵɵdefineInjectable({ token: AuthService, factory: AuthSer
     }], function () { return [{ type: HttpClient }]; }, null); })();
 
 const _c0 = ["canvas"];
-// import { ActivatedRoute } from '@angular/router';
+function KvmComponent_mat_option_5_Template(rf, ctx) { if (rf & 1) {
+    ɵɵelementStart(0, "mat-option", 4);
+    ɵɵtext(1);
+    ɵɵelementEnd();
+} if (rf & 2) {
+    const encode_r2 = ctx.$implicit;
+    ɵɵproperty("value", encode_r2.value);
+    ɵɵadvance(1);
+    ɵɵtextInterpolate1(" ", encode_r2.viewValue, " ");
+} }
 class KvmComponent {
-    constructor(
-    // public snackBar: MatSnackBar,
-    dialog, authService, devicesService) {
+    constructor(snackBar, dialog, authService, devicesService, params // public readonly activatedRoute: ActivatedRoute
+    ) {
+        this.snackBar = snackBar;
         this.dialog = dialog;
         this.authService = authService;
         this.devicesService = devicesService;
+        this.params = params;
         // //setting a width and height for the canvas
         this.width = 400;
         this.height = 400;
@@ -185,6 +232,7 @@ class KvmComponent {
             this.keyboardHelper.UnGrabKeyInput();
             this.reset();
         };
+        this.deviceId = this.params.deviceId;
         if (environment.mpsServer.includes('/mps')) {
             //handles kong route
             this.server = `${environment.mpsServer.replace('http', 'ws')}/ws/relay`;
@@ -241,7 +289,7 @@ class KvmComponent {
         this.devicesService
             .getPowerState(this.deviceId)
             .pipe(catchError(() => {
-            // this.snackBar.open(`Error retrieving power status`, undefined, SnackbarDefaults.defaultError)
+            this.snackBar.open(`Error retrieving power status`, undefined, SnackbarDefaults.defaultError);
             return of();
         }), finalize(() => { }))
             .subscribe((data) => {
@@ -277,11 +325,10 @@ class KvmComponent {
     }
     setAmtFeatures() {
         this.isLoading = true;
-        console.log('coming inside in setAmtfeatures');
         this.devicesService
             .setAmtFeatures(this.deviceId)
             .pipe(catchError(() => {
-            // this.snackBar.open(`Error enabling kvm`, undefined, SnackbarDefaults.defaultError)
+            this.snackBar.open(`Error enabling kvm`, undefined, SnackbarDefaults.defaultError);
             this.init();
             return of();
         }), finalize(() => { }))
@@ -330,25 +377,35 @@ class KvmComponent {
         }
     }
 }
-KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(ɵɵdirectiveInject(MatDialog), ɵɵdirectiveInject(AuthService), ɵɵdirectiveInject(KvmService)); };
+KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(ɵɵdirectiveInject(MatSnackBar), ɵɵdirectiveInject(MatDialog), ɵɵdirectiveInject(AuthService), ɵɵdirectiveInject(KvmService), ɵɵdirectiveInject('userInput')); };
 KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt-kvm"]], viewQuery: function KvmComponent_Query(rf, ctx) { if (rf & 1) {
         ɵɵviewQuery(_c0, 1);
     } if (rf & 2) {
         let _t;
         ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.canvas = _t.first);
-    } }, inputs: { width: "width", height: "height" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 5, vars: 2, consts: [[2, "display", "block"], ["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown"], ["canvas", ""]], template: function KvmComponent_Template(rf, ctx) { if (rf & 1) {
-        ɵɵelementStart(0, "div");
-        ɵɵelementStart(1, "button", 0);
-        ɵɵtext(2, " connect ");
+    } }, inputs: { width: "width", height: "height" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 8, vars: 4, consts: [[3, "ngModel", "ngModelChange"], [3, "value", 4, "ngFor", "ngForOf"], ["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown"], ["canvas", ""], [3, "value"]], template: function KvmComponent_Template(rf, ctx) { if (rf & 1) {
+        ɵɵelementStart(0, "mat-toolbar");
+        ɵɵelementStart(1, "mat-form-field");
+        ɵɵelementStart(2, "mat-label");
+        ɵɵtext(3, "Choose encoding type");
         ɵɵelementEnd();
-        ɵɵelementStart(3, "canvas", 1, 2);
-        ɵɵlistener("mouseup", function KvmComponent_Template_canvas_mouseup_3_listener($event) { return ctx.onMouseup($event); })("mousedown", function KvmComponent_Template_canvas_mousedown_3_listener($event) { return ctx.onMousedown($event); });
+        ɵɵelementStart(4, "mat-select", 0);
+        ɵɵlistener("ngModelChange", function KvmComponent_Template_mat_select_ngModelChange_4_listener($event) { return ctx.selected = $event; })("ngModelChange", function KvmComponent_Template_mat_select_ngModelChange_4_listener() { return ctx.onEncodingChange(); });
+        ɵɵtemplate(5, KvmComponent_mat_option_5_Template, 2, 2, "mat-option", 1);
         ɵɵelementEnd();
+        ɵɵelementEnd();
+        ɵɵelementEnd();
+        ɵɵelementStart(6, "canvas", 2, 3);
+        ɵɵlistener("mouseup", function KvmComponent_Template_canvas_mouseup_6_listener($event) { return ctx.onMouseup($event); })("mousedown", function KvmComponent_Template_canvas_mousedown_6_listener($event) { return ctx.onMousedown($event); });
         ɵɵelementEnd();
     } if (rf & 2) {
-        ɵɵadvance(3);
+        ɵɵadvance(4);
+        ɵɵproperty("ngModel", ctx.selected);
+        ɵɵadvance(1);
+        ɵɵproperty("ngForOf", ctx.encodings);
+        ɵɵadvance(1);
         ɵɵproperty("width", ctx.width)("height", ctx.height);
-    } }, encapsulation: 2 });
+    } }, directives: [MatToolbar, MatFormField, MatLabel, MatSelect, NgControlStatus, NgModel, NgForOf, MatOption], encapsulation: 2 });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(KvmComponent, [{
         type: Component,
         args: [{
@@ -356,7 +413,10 @@ KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt
                 templateUrl: './kvm.component.html',
                 styles: [],
             }]
-    }], function () { return [{ type: MatDialog }, { type: AuthService }, { type: KvmService }]; }, { canvas: [{
+    }], function () { return [{ type: MatSnackBar }, { type: MatDialog }, { type: AuthService }, { type: KvmService }, { type: undefined, decorators: [{
+                type: Inject,
+                args: ['userInput']
+            }] }]; }, { canvas: [{
             type: ViewChild,
             args: ['canvas', { static: false }]
         }], width: [{
@@ -689,20 +749,97 @@ SharedModule.ɵinj = ɵɵdefineInjector({ imports: [[
             }]
     }], null, null); })();
 
+class AuthorizeInterceptor {
+    constructor(params, dialog) {
+        this.params = params;
+        this.dialog = dialog;
+    }
+    intercept(request, next) {
+        request = request.clone({
+            setHeaders: {
+                Authorization: `Bearer ${this.params.authToken}`,
+            },
+        });
+        return next.handle(request).pipe(tap((data) => {
+            if (data instanceof HttpResponse) {
+                return data;
+            }
+            return null;
+        }, (error) => {
+            if (error instanceof HttpErrorResponse) {
+                if (error.status === 401) {
+                    this.dialog.open(DialogContentComponent, {
+                        data: { name: 'session time out. Please login again' },
+                    });
+                }
+            }
+            return throwError(error);
+        }));
+    }
+}
+AuthorizeInterceptor.ɵfac = function AuthorizeInterceptor_Factory(t) { return new (t || AuthorizeInterceptor)(ɵɵinject('userInput'), ɵɵinject(MatDialog)); };
+AuthorizeInterceptor.ɵprov = ɵɵdefineInjectable({ token: AuthorizeInterceptor, factory: AuthorizeInterceptor.ɵfac });
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(AuthorizeInterceptor, [{
+        type: Injectable
+    }], function () { return [{ type: undefined, decorators: [{
+                type: Inject,
+                args: ['userInput']
+            }] }, { type: MatDialog }]; }, null); })();
+
 class KvmModule {
+    static forRoot(param) {
+        return {
+            ngModule: KvmModule,
+            providers: [
+                KvmService,
+                {
+                    provide: 'userInput',
+                    useValue: param,
+                },
+            ],
+        };
+    }
 }
 KvmModule.ɵfac = function KvmModule_Factory(t) { return new (t || KvmModule)(); };
 KvmModule.ɵmod = ɵɵdefineNgModule({ type: KvmModule });
-KvmModule.ɵinj = ɵɵdefineInjector({ providers: [AuthService, KvmService], imports: [[HttpClientModule, BrowserModule, SharedModule.forRoot()]] });
-(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(KvmModule, { declarations: [KvmComponent, DeviceToolbarComponent], imports: [HttpClientModule, BrowserModule, SharedModule], exports: [KvmComponent] }); })();
+KvmModule.ɵinj = ɵɵdefineInjector({ providers: [
+        AuthService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthorizeInterceptor,
+            multi: true,
+        },
+    ], imports: [[
+            HttpClientModule,
+            FlexLayoutModule,
+            BrowserModule,
+            SharedModule.forRoot(),
+            BrowserAnimationsModule,
+        ]] });
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(KvmModule, { declarations: [KvmComponent, DeviceToolbarComponent], imports: [HttpClientModule,
+        FlexLayoutModule,
+        BrowserModule, SharedModule, BrowserAnimationsModule], exports: [KvmComponent] }); })();
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(KvmModule, [{
         type: NgModule,
         args: [{
                 declarations: [KvmComponent, DeviceToolbarComponent],
-                imports: [HttpClientModule, BrowserModule, SharedModule.forRoot()],
+                imports: [
+                    HttpClientModule,
+                    FlexLayoutModule,
+                    BrowserModule,
+                    SharedModule.forRoot(),
+                    BrowserAnimationsModule,
+                ],
                 exports: [KvmComponent],
                 schemas: [CUSTOM_ELEMENTS_SCHEMA],
-                providers: [AuthService, KvmService],
+                providers: [
+                    AuthService,
+                    {
+                        provide: HTTP_INTERCEPTORS,
+                        useClass: AuthorizeInterceptor,
+                        multi: true,
+                    },
+                ],
             }]
     }], null, null); })();
 

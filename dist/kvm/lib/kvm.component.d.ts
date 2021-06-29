@@ -3,12 +3,15 @@ import { IDataProcessor, ILogger, KeyBoardHelper, MouseHelper } from '@open-amt-
 import { KvmService } from './kvm.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from './auth.service';
 import * as i0 from "@angular/core";
 export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
+    snackBar: MatSnackBar;
     dialog: MatDialog;
     private readonly authService;
     private readonly devicesService;
+    params: any;
     canvas: ElementRef | undefined;
     context: CanvasRenderingContext2D;
     width: number;
@@ -38,7 +41,7 @@ export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
         value: number;
         viewValue: string;
     }[];
-    constructor(dialog: MatDialog, authService: AuthService, devicesService: KvmService);
+    constructor(snackBar: MatSnackBar, dialog: MatDialog, authService: AuthService, devicesService: KvmService, params: any);
     ngOnInit(): void;
     ngAfterViewInit(): void;
     instantiate(): void;
