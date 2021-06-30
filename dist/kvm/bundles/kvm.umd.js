@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/operators'), require('@angular/common/http'), require('@open-amt-cloud-toolkit/ui-toolkit/core'), require('rxjs'), require('@angular/material/dialog'), require('@angular/material/button'), require('@angular/material/snack-bar'), require('@angular/material/toolbar'), require('@angular/material/form-field'), require('@angular/material/select'), require('@angular/forms'), require('@angular/common'), require('@angular/material/core'), require('@angular/platform-browser'), require('@angular/platform-browser/animations'), require('@angular/flex-layout'), require('@angular/material/grid-list'), require('@angular/material/expansion'), require('@angular/material/stepper'), require('@angular/material/chips'), require('@angular/material/table'), require('@angular/material/card'), require('@angular/material/list'), require('@angular/material/paginator'), require('@angular/material/sort'), require('@angular/material/checkbox'), require('@angular/material/tooltip'), require('@angular/material/autocomplete'), require('@angular/material/input'), require('@angular/material/radio'), require('@angular/material/slide-toggle'), require('@angular/material/progress-bar'), require('@angular/material/datepicker'), require('@angular/material/progress-spinner'), require('@angular/material/icon'), require('@angular/material/sidenav'), require('@angular/material/menu'), require('@angular/material/tabs'), require('@angular/material/tree'), require('@angular/material/button-toggle'), require('@angular/cdk/table')) :
-    typeof define === 'function' && define.amd ? define('kvm', ['exports', '@angular/core', 'rxjs/operators', '@angular/common/http', '@open-amt-cloud-toolkit/ui-toolkit/core', 'rxjs', '@angular/material/dialog', '@angular/material/button', '@angular/material/snack-bar', '@angular/material/toolbar', '@angular/material/form-field', '@angular/material/select', '@angular/forms', '@angular/common', '@angular/material/core', '@angular/platform-browser', '@angular/platform-browser/animations', '@angular/flex-layout', '@angular/material/grid-list', '@angular/material/expansion', '@angular/material/stepper', '@angular/material/chips', '@angular/material/table', '@angular/material/card', '@angular/material/list', '@angular/material/paginator', '@angular/material/sort', '@angular/material/checkbox', '@angular/material/tooltip', '@angular/material/autocomplete', '@angular/material/input', '@angular/material/radio', '@angular/material/slide-toggle', '@angular/material/progress-bar', '@angular/material/datepicker', '@angular/material/progress-spinner', '@angular/material/icon', '@angular/material/sidenav', '@angular/material/menu', '@angular/material/tabs', '@angular/material/tree', '@angular/material/button-toggle', '@angular/cdk/table'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.kvm = {}, global.ng.core, global.rxjs.operators, global.ng.common.http, global['@open-amt-cloud-toolkit']['ui-toolkit'].core, global.rxjs, global.ng.material.dialog, global.ng.material.button, global.ng.material.snackBar, global.ng.material.toolbar, global.ng.material.formField, global.ng.material.select, global.ng.forms, global.ng.common, global.ng.material.core, global.ng.platformBrowser, global.ng.platformBrowser.animations, global.ng.flexLayout, global.ng.material.gridList, global.ng.material.expansion, global.ng.material.stepper, global.ng.material.chips, global.ng.material.table, global.ng.material.card, global.ng.material.list, global.ng.material.paginator, global.ng.material.sort, global.ng.material.checkbox, global.ng.material.tooltip, global.ng.material.autocomplete, global.ng.material.input, global.ng.material.radio, global.ng.material.slideToggle, global.ng.material.progressBar, global.ng.material.datepicker, global.ng.material.progressSpinner, global.ng.material.icon, global.ng.material.sidenav, global.ng.material.menu, global.ng.material.tabs, global.ng.material.tree, global.ng.material.buttonToggle, global.ng.cdk.table));
-}(this, (function (exports, i0, operators, i1, core, rxjs, i1$1, i2, i1$2, i5, i6, i7, i8, i9, i10, platformBrowser, animations, flexLayout, gridList, expansion, stepper, chips, table, card, list, paginator, sort, checkbox, tooltip, autocomplete, input, radio, slideToggle, progressBar, datepicker, progressSpinner, icon, sidenav, menu, tabs, tree, buttonToggle, table$1) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/operators'), require('@angular/common/http'), require('@open-amt-cloud-toolkit/ui-toolkit/core'), require('rxjs'), require('@angular/material/dialog'), require('@angular/material/button'), require('@angular/material/snack-bar'), require('@angular/platform-browser'), require('@angular/platform-browser/animations'), require('@angular/flex-layout'), require('@angular/common'), require('@angular/forms'), require('@angular/material/grid-list'), require('@angular/material/expansion'), require('@angular/material/stepper'), require('@angular/material/chips'), require('@angular/material/core'), require('@angular/material/table'), require('@angular/material/card'), require('@angular/material/list'), require('@angular/material/paginator'), require('@angular/material/sort'), require('@angular/material/checkbox'), require('@angular/material/tooltip'), require('@angular/material/autocomplete'), require('@angular/material/input'), require('@angular/material/form-field'), require('@angular/material/radio'), require('@angular/material/select'), require('@angular/material/slide-toggle'), require('@angular/material/progress-bar'), require('@angular/material/datepicker'), require('@angular/material/progress-spinner'), require('@angular/material/icon'), require('@angular/material/toolbar'), require('@angular/material/sidenav'), require('@angular/material/menu'), require('@angular/material/tabs'), require('@angular/material/tree'), require('@angular/material/button-toggle'), require('@angular/cdk/table')) :
+    typeof define === 'function' && define.amd ? define('kvm', ['exports', '@angular/core', 'rxjs/operators', '@angular/common/http', '@open-amt-cloud-toolkit/ui-toolkit/core', 'rxjs', '@angular/material/dialog', '@angular/material/button', '@angular/material/snack-bar', '@angular/platform-browser', '@angular/platform-browser/animations', '@angular/flex-layout', '@angular/common', '@angular/forms', '@angular/material/grid-list', '@angular/material/expansion', '@angular/material/stepper', '@angular/material/chips', '@angular/material/core', '@angular/material/table', '@angular/material/card', '@angular/material/list', '@angular/material/paginator', '@angular/material/sort', '@angular/material/checkbox', '@angular/material/tooltip', '@angular/material/autocomplete', '@angular/material/input', '@angular/material/form-field', '@angular/material/radio', '@angular/material/select', '@angular/material/slide-toggle', '@angular/material/progress-bar', '@angular/material/datepicker', '@angular/material/progress-spinner', '@angular/material/icon', '@angular/material/toolbar', '@angular/material/sidenav', '@angular/material/menu', '@angular/material/tabs', '@angular/material/tree', '@angular/material/button-toggle', '@angular/cdk/table'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.kvm = {}, global.ng.core, global.rxjs.operators, global.ng.common.http, global['@open-amt-cloud-toolkit']['ui-toolkit'].core, global.rxjs, global.ng.material.dialog, global.ng.material.button, global.ng.material.snackBar, global.ng.platformBrowser, global.ng.platformBrowser.animations, global.ng.flexLayout, global.ng.common, global.ng.forms, global.ng.material.gridList, global.ng.material.expansion, global.ng.material.stepper, global.ng.material.chips, global.ng.material.core, global.ng.material.table, global.ng.material.card, global.ng.material.list, global.ng.material.paginator, global.ng.material.sort, global.ng.material.checkbox, global.ng.material.tooltip, global.ng.material.autocomplete, global.ng.material.input, global.ng.material.formField, global.ng.material.radio, global.ng.material.select, global.ng.material.slideToggle, global.ng.material.progressBar, global.ng.material.datepicker, global.ng.material.progressSpinner, global.ng.material.icon, global.ng.material.toolbar, global.ng.material.sidenav, global.ng.material.menu, global.ng.material.tabs, global.ng.material.tree, global.ng.material.buttonToggle, global.ng.cdk.table));
+}(this, (function (exports, i0, operators, i1, core, rxjs, i1$1, i2, i1$2, platformBrowser, animations, flexLayout, common, forms, gridList, expansion, stepper, chips, core$1, table, card, list, paginator, sort, checkbox, tooltip, autocomplete, input, formField, radio, select, slideToggle, progressBar, datepicker, progressSpinner, icon, toolbar, sidenav, menu, tabs, tree, buttonToggle, table$1) { 'use strict';
 
     var environment = {
         production: false,
@@ -121,60 +121,12 @@
         },
     };
 
-    var AuthService = /** @class */ (function () {
-        function AuthService(http) {
-            this.http = http;
-            this.loggedInSubject = new i0.EventEmitter(false);
-            this.isLoggedIn = false;
-            this.url = environment.mpsServer + "/api/v1/authorize";
-            if (localStorage.loggedInUser != null) {
-                this.isLoggedIn = true;
-                this.loggedInSubject.next(this.isLoggedIn);
-            }
-            if (environment.mpsServer.includes('/mps')) {
-                // handles kong route
-                this.url = environment.mpsServer + "/login/api/v1/authorize";
-            }
-        }
-        AuthService.prototype.getLoggedUserToken = function () {
-            var loggedUser = localStorage.getItem('loggedInUser');
-            var token = JSON.parse(loggedUser).token;
-            return token;
-        };
-        return AuthService;
-    }());
-    AuthService.ɵfac = function AuthService_Factory(t) { return new (t || AuthService)(i0.ɵɵinject(i1.HttpClient)); };
-    AuthService.ɵprov = i0.ɵɵdefineInjectable({ token: AuthService, factory: AuthService.ɵfac, providedIn: 'platform' });
-    (function () {
-        (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(AuthService, [{
-                type: i0.Injectable,
-                args: [{
-                        providedIn: 'platform',
-                    }]
-            }], function () { return [{ type: i1.HttpClient }]; }, null);
-    })();
-
     var _c0 = ["canvas"];
-    function KvmComponent_mat_option_5_Template(rf, ctx) {
-        if (rf & 1) {
-            i0.ɵɵelementStart(0, "mat-option", 4);
-            i0.ɵɵtext(1);
-            i0.ɵɵelementEnd();
-        }
-        if (rf & 2) {
-            var encode_r2 = ctx.$implicit;
-            i0.ɵɵproperty("value", encode_r2.value);
-            i0.ɵɵadvance(1);
-            i0.ɵɵtextInterpolate1(" ", encode_r2.viewValue, " ");
-        }
-    }
     var KvmComponent = /** @class */ (function () {
-        function KvmComponent(snackBar, dialog, authService, devicesService, params // public readonly activatedRoute: ActivatedRoute
-        ) {
+        function KvmComponent(snackBar, dialog, devicesService, params) {
             var _this = this;
             this.snackBar = snackBar;
             this.dialog = dialog;
-            this.authService = authService;
             this.devicesService = devicesService;
             this.params = params;
             // //setting a width and height for the canvas
@@ -222,10 +174,6 @@
         KvmComponent.prototype.ngOnInit = function () {
             var _this = this;
             this.logger = new core.ConsoleLogger(1);
-            // this.activatedRoute.params.subscribe((params) => {
-            //   this.isLoading = true;
-            //   this.deviceId = params.id;
-            // });
             this.stopSocketSubscription = this.devicesService.stopwebSocket.subscribe(function () {
                 _this.stopKvm();
             });
@@ -244,7 +192,7 @@
             var _this = this;
             var _a, _b;
             this.context = (_a = this.canvas) === null || _a === void 0 ? void 0 : _a.nativeElement.getContext('2d');
-            this.redirector = new core.AMTKvmDataRedirector(this.logger, core.Protocol.KVM, new FileReader(), this.deviceId, 16994, '', '', 0, 0, this.authService.getLoggedUserToken(), this.server);
+            this.redirector = new core.AMTKvmDataRedirector(this.logger, core.Protocol.KVM, new FileReader(), this.deviceId, 16994, '', '', 0, 0, this.params.authToken, this.server);
             this.module = new core.AMTDesktop(this.logger, this.context);
             this.dataProcessor = new core.DataProcessor(this.logger, this.redirector, this.module);
             this.mouseHelper = new core.MouseHelper(this.module, this.redirector, 200);
@@ -364,7 +312,7 @@
         };
         return KvmComponent;
     }());
-    KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(i0.ɵɵdirectiveInject(i1$2.MatSnackBar), i0.ɵɵdirectiveInject(i1$1.MatDialog), i0.ɵɵdirectiveInject(AuthService), i0.ɵɵdirectiveInject(KvmService), i0.ɵɵdirectiveInject('userInput')); };
+    KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(i0.ɵɵdirectiveInject(i1$2.MatSnackBar), i0.ɵɵdirectiveInject(i1$1.MatDialog), i0.ɵɵdirectiveInject(KvmService), i0.ɵɵdirectiveInject('userInput')); };
     KvmComponent.ɵcmp = i0.ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt-kvm"]], viewQuery: function KvmComponent_Query(rf, ctx) {
             if (rf & 1) {
                 i0.ɵɵviewQuery(_c0, 1);
@@ -373,42 +321,29 @@
                 var _t = void 0;
                 i0.ɵɵqueryRefresh(_t = i0.ɵɵloadQuery()) && (ctx.canvas = _t.first);
             }
-        }, inputs: { width: "width", height: "height" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 8, vars: 4, consts: [[3, "ngModel", "ngModelChange"], [3, "value", 4, "ngFor", "ngForOf"], ["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown"], ["canvas", ""], [3, "value"]], template: function KvmComponent_Template(rf, ctx) {
+        }, inputs: { width: "width", height: "height" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 3, vars: 2, consts: [["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown"], ["canvas", ""]], template: function KvmComponent_Template(rf, ctx) {
             if (rf & 1) {
-                i0.ɵɵelementStart(0, "mat-toolbar");
-                i0.ɵɵelementStart(1, "mat-form-field");
-                i0.ɵɵelementStart(2, "mat-label");
-                i0.ɵɵtext(3, "Choose encoding type");
+                i0.ɵɵelementStart(0, "div");
+                i0.ɵɵelementStart(1, "canvas", 0, 1);
+                i0.ɵɵlistener("mouseup", function KvmComponent_Template_canvas_mouseup_1_listener($event) { return ctx.onMouseup($event); })("mousedown", function KvmComponent_Template_canvas_mousedown_1_listener($event) { return ctx.onMousedown($event); });
                 i0.ɵɵelementEnd();
-                i0.ɵɵelementStart(4, "mat-select", 0);
-                i0.ɵɵlistener("ngModelChange", function KvmComponent_Template_mat_select_ngModelChange_4_listener($event) { return ctx.selected = $event; })("ngModelChange", function KvmComponent_Template_mat_select_ngModelChange_4_listener() { return ctx.onEncodingChange(); });
-                i0.ɵɵtemplate(5, KvmComponent_mat_option_5_Template, 2, 2, "mat-option", 1);
-                i0.ɵɵelementEnd();
-                i0.ɵɵelementEnd();
-                i0.ɵɵelementEnd();
-                i0.ɵɵelementStart(6, "canvas", 2, 3);
-                i0.ɵɵlistener("mouseup", function KvmComponent_Template_canvas_mouseup_6_listener($event) { return ctx.onMouseup($event); })("mousedown", function KvmComponent_Template_canvas_mousedown_6_listener($event) { return ctx.onMousedown($event); });
                 i0.ɵɵelementEnd();
             }
             if (rf & 2) {
-                i0.ɵɵadvance(4);
-                i0.ɵɵproperty("ngModel", ctx.selected);
-                i0.ɵɵadvance(1);
-                i0.ɵɵproperty("ngForOf", ctx.encodings);
                 i0.ɵɵadvance(1);
                 i0.ɵɵproperty("width", ctx.width)("height", ctx.height);
             }
-        }, directives: [i5.MatToolbar, i6.MatFormField, i6.MatLabel, i7.MatSelect, i8.NgControlStatus, i8.NgModel, i9.NgForOf, i10.MatOption], encapsulation: 2 });
+        }, encapsulation: 2 });
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(KvmComponent, [{
                 type: i0.Component,
                 args: [{
                         selector: 'amt-kvm',
                         templateUrl: './kvm.component.html',
-                        styles: [],
+                        styleUrls: []
                     }]
             }], function () {
-            return [{ type: i1$2.MatSnackBar }, { type: i1$1.MatDialog }, { type: AuthService }, { type: KvmService }, { type: undefined, decorators: [{
+            return [{ type: i1$2.MatSnackBar }, { type: i1$1.MatDialog }, { type: KvmService }, { type: undefined, decorators: [{
                             type: i0.Inject,
                             args: ['userInput']
                         }] }];
@@ -519,9 +454,9 @@
             { provide: i1$2.MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 30000, panelClass: ['success', 'mat-elevation-z12'] } }
         ], imports: [[
                 flexLayout.FlexLayoutModule,
-                i8.ReactiveFormsModule,
-                i8.FormsModule,
-                i10.MatNativeDateModule,
+                forms.ReactiveFormsModule,
+                forms.FormsModule,
+                core$1.MatNativeDateModule,
                 table.MatTableModule,
                 tree.MatTreeModule,
                 menu.MatMenuModule,
@@ -535,7 +470,7 @@
                 expansion.MatExpansionModule,
                 gridList.MatGridListModule,
                 chips.MatChipsModule,
-                i7.MatSelectModule,
+                select.MatSelectModule,
                 list.MatListModule,
                 card.MatCardModule,
                 autocomplete.MatAutocompleteModule,
@@ -547,15 +482,15 @@
                 datepicker.MatDatepickerModule,
                 progressBar.MatProgressBarModule,
                 progressSpinner.MatProgressSpinnerModule,
-                i5.MatToolbarModule,
+                toolbar.MatToolbarModule,
                 icon.MatIconModule,
                 tabs.MatTabsModule,
-                i6.MatFormFieldModule,
+                formField.MatFormFieldModule,
                 i2.MatButtonModule,
                 paginator.MatPaginatorModule
             ], flexLayout.FlexLayoutModule,
-            i8.ReactiveFormsModule,
-            i8.FormsModule,
+            forms.ReactiveFormsModule,
+            forms.FormsModule,
             autocomplete.MatAutocompleteModule,
             datepicker.MatDatepickerModule,
             table.MatTableModule,
@@ -575,23 +510,23 @@
             stepper.MatStepperModule,
             chips.MatChipsModule,
             card.MatCardModule,
-            i7.MatSelectModule,
+            select.MatSelectModule,
             input.MatInputModule,
-            i5.MatToolbarModule,
+            toolbar.MatToolbarModule,
             tabs.MatTabsModule,
-            i6.MatFormFieldModule,
+            formField.MatFormFieldModule,
             i2.MatButtonModule,
             progressBar.MatProgressBarModule, progressSpinner.MatProgressSpinnerModule,
             slideToggle.MatSlideToggleModule,
             sidenav.MatSidenavModule,
             paginator.MatPaginatorModule,
             table$1.CdkTableModule,
-            i10.MatNativeDateModule] });
+            core$1.MatNativeDateModule] });
     (function () {
         (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(OpenAMTMaterialModule, { declarations: [AreYouSureDialogComponent, PowerUpAlertComponent, DialogContentComponent], imports: [flexLayout.FlexLayoutModule,
-                i8.ReactiveFormsModule,
-                i8.FormsModule,
-                i10.MatNativeDateModule,
+                forms.ReactiveFormsModule,
+                forms.FormsModule,
+                core$1.MatNativeDateModule,
                 table.MatTableModule,
                 tree.MatTreeModule,
                 menu.MatMenuModule,
@@ -605,7 +540,7 @@
                 expansion.MatExpansionModule,
                 gridList.MatGridListModule,
                 chips.MatChipsModule,
-                i7.MatSelectModule,
+                select.MatSelectModule,
                 list.MatListModule,
                 card.MatCardModule,
                 autocomplete.MatAutocompleteModule,
@@ -617,14 +552,14 @@
                 datepicker.MatDatepickerModule,
                 progressBar.MatProgressBarModule,
                 progressSpinner.MatProgressSpinnerModule,
-                i5.MatToolbarModule,
+                toolbar.MatToolbarModule,
                 icon.MatIconModule,
                 tabs.MatTabsModule,
-                i6.MatFormFieldModule,
+                formField.MatFormFieldModule,
                 i2.MatButtonModule,
                 paginator.MatPaginatorModule], exports: [flexLayout.FlexLayoutModule,
-                i8.ReactiveFormsModule,
-                i8.FormsModule,
+                forms.ReactiveFormsModule,
+                forms.FormsModule,
                 autocomplete.MatAutocompleteModule,
                 datepicker.MatDatepickerModule,
                 table.MatTableModule,
@@ -644,18 +579,18 @@
                 stepper.MatStepperModule,
                 chips.MatChipsModule,
                 card.MatCardModule,
-                i7.MatSelectModule,
+                select.MatSelectModule,
                 input.MatInputModule,
-                i5.MatToolbarModule,
+                toolbar.MatToolbarModule,
                 tabs.MatTabsModule,
-                i6.MatFormFieldModule,
+                formField.MatFormFieldModule,
                 i2.MatButtonModule,
                 progressBar.MatProgressBarModule, progressSpinner.MatProgressSpinnerModule,
                 slideToggle.MatSlideToggleModule,
                 sidenav.MatSidenavModule,
                 paginator.MatPaginatorModule,
                 table$1.CdkTableModule,
-                i10.MatNativeDateModule] });
+                core$1.MatNativeDateModule] });
     })();
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(OpenAMTMaterialModule, [{
@@ -663,9 +598,9 @@
                 args: [{
                         imports: [
                             flexLayout.FlexLayoutModule,
-                            i8.ReactiveFormsModule,
-                            i8.FormsModule,
-                            i10.MatNativeDateModule,
+                            forms.ReactiveFormsModule,
+                            forms.FormsModule,
+                            core$1.MatNativeDateModule,
                             table.MatTableModule,
                             tree.MatTreeModule,
                             menu.MatMenuModule,
@@ -679,7 +614,7 @@
                             expansion.MatExpansionModule,
                             gridList.MatGridListModule,
                             chips.MatChipsModule,
-                            i7.MatSelectModule,
+                            select.MatSelectModule,
                             list.MatListModule,
                             card.MatCardModule,
                             autocomplete.MatAutocompleteModule,
@@ -691,17 +626,17 @@
                             datepicker.MatDatepickerModule,
                             progressBar.MatProgressBarModule,
                             progressSpinner.MatProgressSpinnerModule,
-                            i5.MatToolbarModule,
+                            toolbar.MatToolbarModule,
                             icon.MatIconModule,
                             tabs.MatTabsModule,
-                            i6.MatFormFieldModule,
+                            formField.MatFormFieldModule,
                             i2.MatButtonModule,
                             paginator.MatPaginatorModule
                         ],
                         exports: [
                             flexLayout.FlexLayoutModule,
-                            i8.ReactiveFormsModule,
-                            i8.FormsModule,
+                            forms.ReactiveFormsModule,
+                            forms.FormsModule,
                             autocomplete.MatAutocompleteModule,
                             datepicker.MatDatepickerModule,
                             table.MatTableModule,
@@ -721,18 +656,18 @@
                             stepper.MatStepperModule,
                             chips.MatChipsModule,
                             card.MatCardModule,
-                            i7.MatSelectModule,
+                            select.MatSelectModule,
                             input.MatInputModule,
-                            i5.MatToolbarModule,
+                            toolbar.MatToolbarModule,
                             tabs.MatTabsModule,
-                            i6.MatFormFieldModule,
+                            formField.MatFormFieldModule,
                             i2.MatButtonModule,
                             progressBar.MatProgressBarModule, progressSpinner.MatProgressSpinnerModule,
                             slideToggle.MatSlideToggleModule,
                             sidenav.MatSidenavModule,
                             paginator.MatPaginatorModule,
                             table$1.CdkTableModule,
-                            i10.MatNativeDateModule
+                            core$1.MatNativeDateModule
                         ],
                         providers: [
                             { provide: i1$2.MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 30000, panelClass: ['success', 'mat-elevation-z12'] } }
@@ -755,10 +690,10 @@
     SharedModule.ɵfac = function SharedModule_Factory(t) { return new (t || SharedModule)(); };
     SharedModule.ɵmod = i0.ɵɵdefineNgModule({ type: SharedModule });
     SharedModule.ɵinj = i0.ɵɵdefineInjector({ imports: [[
-                i9.CommonModule,
+                common.CommonModule,
                 OpenAMTMaterialModule
             ], OpenAMTMaterialModule] });
-    (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(SharedModule, { imports: [i9.CommonModule, OpenAMTMaterialModule], exports: [OpenAMTMaterialModule] }); })();
+    (function () { (typeof ngJitMode === "undefined" || ngJitMode) && i0.ɵɵsetNgModuleScope(SharedModule, { imports: [common.CommonModule, OpenAMTMaterialModule], exports: [OpenAMTMaterialModule] }); })();
     (function () {
         (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(SharedModule, [{
                 type: i0.NgModule,
@@ -766,7 +701,7 @@
                         declarations: [],
                         exports: [OpenAMTMaterialModule],
                         imports: [
-                            i9.CommonModule,
+                            common.CommonModule,
                             OpenAMTMaterialModule
                         ]
                     }]
@@ -836,7 +771,6 @@
     KvmModule.ɵfac = function KvmModule_Factory(t) { return new (t || KvmModule)(); };
     KvmModule.ɵmod = i0.ɵɵdefineNgModule({ type: KvmModule });
     KvmModule.ɵinj = i0.ɵɵdefineInjector({ providers: [
-            AuthService,
             {
                 provide: i1.HTTP_INTERCEPTORS,
                 useClass: AuthorizeInterceptor,
@@ -869,7 +803,6 @@
                         exports: [KvmComponent],
                         schemas: [i0.CUSTOM_ELEMENTS_SCHEMA],
                         providers: [
-                            AuthService,
                             {
                                 provide: i1.HTTP_INTERCEPTORS,
                                 useClass: AuthorizeInterceptor,

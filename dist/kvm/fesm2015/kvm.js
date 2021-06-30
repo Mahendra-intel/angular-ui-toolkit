@@ -1,4 +1,4 @@
-import { EventEmitter, ɵɵinject, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdefineComponent, ɵɵelementStart, ɵɵtext, ɵɵelementEnd, ɵɵadvance, ɵɵproperty, Component, ɵɵtextInterpolate1, ɵɵdirectiveInject, ɵɵviewQuery, ɵɵqueryRefresh, ɵɵloadQuery, ɵɵlistener, ɵɵtemplate, Inject, ViewChild, Input, Output, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { EventEmitter, ɵɵinject, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdefineComponent, ɵɵelementStart, ɵɵtext, ɵɵelementEnd, ɵɵadvance, ɵɵproperty, Component, ɵɵdirectiveInject, ɵɵviewQuery, ɵɵqueryRefresh, ɵɵloadQuery, ɵɵlistener, Inject, ViewChild, Input, Output, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { catchError, mergeMap, throttleTime, finalize, tap } from 'rxjs/operators';
 import { HttpClient, HttpResponse, HttpErrorResponse, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ConsoleLogger, AMTKvmDataRedirector, Protocol, AMTDesktop, DataProcessor, MouseHelper, KeyBoardHelper } from '@open-amt-cloud-toolkit/ui-toolkit/core';
@@ -6,19 +6,16 @@ import { interval, fromEvent, of, timer, throwError } from 'rxjs';
 import { MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatDialog, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
-import { MatFormField, MatLabel, MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelect, MatSelectModule } from '@angular/material/select';
-import { NgControlStatus, NgModel, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NgForOf, CommonModule } from '@angular/common';
-import { MatOption, MatNativeDateModule } from '@angular/material/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -28,12 +25,15 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -147,53 +147,11 @@ const SnackbarDefaults = {
     },
 };
 
-class AuthService {
-    constructor(http) {
-        this.http = http;
-        this.loggedInSubject = new EventEmitter(false);
-        this.isLoggedIn = false;
-        this.url = `${environment.mpsServer}/api/v1/authorize`;
-        if (localStorage.loggedInUser != null) {
-            this.isLoggedIn = true;
-            this.loggedInSubject.next(this.isLoggedIn);
-        }
-        if (environment.mpsServer.includes('/mps')) {
-            // handles kong route
-            this.url = `${environment.mpsServer}/login/api/v1/authorize`;
-        }
-    }
-    getLoggedUserToken() {
-        const loggedUser = localStorage.getItem('loggedInUser');
-        const token = JSON.parse(loggedUser).token;
-        return token;
-    }
-}
-AuthService.ɵfac = function AuthService_Factory(t) { return new (t || AuthService)(ɵɵinject(HttpClient)); };
-AuthService.ɵprov = ɵɵdefineInjectable({ token: AuthService, factory: AuthService.ɵfac, providedIn: 'platform' });
-(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(AuthService, [{
-        type: Injectable,
-        args: [{
-                providedIn: 'platform',
-            }]
-    }], function () { return [{ type: HttpClient }]; }, null); })();
-
 const _c0 = ["canvas"];
-function KvmComponent_mat_option_5_Template(rf, ctx) { if (rf & 1) {
-    ɵɵelementStart(0, "mat-option", 4);
-    ɵɵtext(1);
-    ɵɵelementEnd();
-} if (rf & 2) {
-    const encode_r2 = ctx.$implicit;
-    ɵɵproperty("value", encode_r2.value);
-    ɵɵadvance(1);
-    ɵɵtextInterpolate1(" ", encode_r2.viewValue, " ");
-} }
 class KvmComponent {
-    constructor(snackBar, dialog, authService, devicesService, params // public readonly activatedRoute: ActivatedRoute
-    ) {
+    constructor(snackBar, dialog, devicesService, params) {
         this.snackBar = snackBar;
         this.dialog = dialog;
-        this.authService = authService;
         this.devicesService = devicesService;
         this.params = params;
         // //setting a width and height for the canvas
@@ -240,10 +198,6 @@ class KvmComponent {
     }
     ngOnInit() {
         this.logger = new ConsoleLogger(1);
-        // this.activatedRoute.params.subscribe((params) => {
-        //   this.isLoading = true;
-        //   this.deviceId = params.id;
-        // });
         this.stopSocketSubscription = this.devicesService.stopwebSocket.subscribe(() => {
             this.stopKvm();
         });
@@ -261,7 +215,7 @@ class KvmComponent {
     instantiate() {
         var _a, _b;
         this.context = (_a = this.canvas) === null || _a === void 0 ? void 0 : _a.nativeElement.getContext('2d');
-        this.redirector = new AMTKvmDataRedirector(this.logger, Protocol.KVM, new FileReader(), this.deviceId, 16994, '', '', 0, 0, this.authService.getLoggedUserToken(), this.server);
+        this.redirector = new AMTKvmDataRedirector(this.logger, Protocol.KVM, new FileReader(), this.deviceId, 16994, '', '', 0, 0, this.params.authToken, this.server);
         this.module = new AMTDesktop(this.logger, this.context);
         this.dataProcessor = new DataProcessor(this.logger, this.redirector, this.module);
         this.mouseHelper = new MouseHelper(this.module, this.redirector, 200);
@@ -377,43 +331,30 @@ class KvmComponent {
         }
     }
 }
-KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(ɵɵdirectiveInject(MatSnackBar), ɵɵdirectiveInject(MatDialog), ɵɵdirectiveInject(AuthService), ɵɵdirectiveInject(KvmService), ɵɵdirectiveInject('userInput')); };
+KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(ɵɵdirectiveInject(MatSnackBar), ɵɵdirectiveInject(MatDialog), ɵɵdirectiveInject(KvmService), ɵɵdirectiveInject('userInput')); };
 KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt-kvm"]], viewQuery: function KvmComponent_Query(rf, ctx) { if (rf & 1) {
         ɵɵviewQuery(_c0, 1);
     } if (rf & 2) {
         let _t;
         ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.canvas = _t.first);
-    } }, inputs: { width: "width", height: "height" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 8, vars: 4, consts: [[3, "ngModel", "ngModelChange"], [3, "value", 4, "ngFor", "ngForOf"], ["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown"], ["canvas", ""], [3, "value"]], template: function KvmComponent_Template(rf, ctx) { if (rf & 1) {
-        ɵɵelementStart(0, "mat-toolbar");
-        ɵɵelementStart(1, "mat-form-field");
-        ɵɵelementStart(2, "mat-label");
-        ɵɵtext(3, "Choose encoding type");
+    } }, inputs: { width: "width", height: "height" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 3, vars: 2, consts: [["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown"], ["canvas", ""]], template: function KvmComponent_Template(rf, ctx) { if (rf & 1) {
+        ɵɵelementStart(0, "div");
+        ɵɵelementStart(1, "canvas", 0, 1);
+        ɵɵlistener("mouseup", function KvmComponent_Template_canvas_mouseup_1_listener($event) { return ctx.onMouseup($event); })("mousedown", function KvmComponent_Template_canvas_mousedown_1_listener($event) { return ctx.onMousedown($event); });
         ɵɵelementEnd();
-        ɵɵelementStart(4, "mat-select", 0);
-        ɵɵlistener("ngModelChange", function KvmComponent_Template_mat_select_ngModelChange_4_listener($event) { return ctx.selected = $event; })("ngModelChange", function KvmComponent_Template_mat_select_ngModelChange_4_listener() { return ctx.onEncodingChange(); });
-        ɵɵtemplate(5, KvmComponent_mat_option_5_Template, 2, 2, "mat-option", 1);
-        ɵɵelementEnd();
-        ɵɵelementEnd();
-        ɵɵelementEnd();
-        ɵɵelementStart(6, "canvas", 2, 3);
-        ɵɵlistener("mouseup", function KvmComponent_Template_canvas_mouseup_6_listener($event) { return ctx.onMouseup($event); })("mousedown", function KvmComponent_Template_canvas_mousedown_6_listener($event) { return ctx.onMousedown($event); });
         ɵɵelementEnd();
     } if (rf & 2) {
-        ɵɵadvance(4);
-        ɵɵproperty("ngModel", ctx.selected);
-        ɵɵadvance(1);
-        ɵɵproperty("ngForOf", ctx.encodings);
         ɵɵadvance(1);
         ɵɵproperty("width", ctx.width)("height", ctx.height);
-    } }, directives: [MatToolbar, MatFormField, MatLabel, MatSelect, NgControlStatus, NgModel, NgForOf, MatOption], encapsulation: 2 });
+    } }, encapsulation: 2 });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(KvmComponent, [{
         type: Component,
         args: [{
                 selector: 'amt-kvm',
                 templateUrl: './kvm.component.html',
-                styles: [],
+                styleUrls: []
             }]
-    }], function () { return [{ type: MatSnackBar }, { type: MatDialog }, { type: AuthService }, { type: KvmService }, { type: undefined, decorators: [{
+    }], function () { return [{ type: MatSnackBar }, { type: MatDialog }, { type: KvmService }, { type: undefined, decorators: [{
                 type: Inject,
                 args: ['userInput']
             }] }]; }, { canvas: [{
@@ -803,7 +744,6 @@ class KvmModule {
 KvmModule.ɵfac = function KvmModule_Factory(t) { return new (t || KvmModule)(); };
 KvmModule.ɵmod = ɵɵdefineNgModule({ type: KvmModule });
 KvmModule.ɵinj = ɵɵdefineInjector({ providers: [
-        AuthService,
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthorizeInterceptor,
@@ -833,7 +773,6 @@ KvmModule.ɵinj = ɵɵdefineInjector({ providers: [
                 exports: [KvmComponent],
                 schemas: [CUSTOM_ELEMENTS_SCHEMA],
                 providers: [
-                    AuthService,
                     {
                         provide: HTTP_INTERCEPTORS,
                         useClass: AuthorizeInterceptor,

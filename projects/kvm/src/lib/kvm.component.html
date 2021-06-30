@@ -1,19 +1,11 @@
-<mat-toolbar>
-  <mat-form-field>
-    <mat-label>Choose encoding type</mat-label>
-    <mat-select [(ngModel)]="selected" (ngModelChange)="onEncodingChange()">
-      <mat-option *ngFor="let encode of encodings" [value]="encode.value">
-        {{ encode.viewValue }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</mat-toolbar>
-<canvas
-  class="canvas"
-  #canvas
-  [width]="width"
-  [height]="height"
-  oncontextmenu="return false"
-  (mouseup)="onMouseup($event)"
-  (mousedown)="onMousedown($event)"
-></canvas>
+<div>
+  <canvas
+    class="canvas"
+    #canvas
+    [width]="width"
+    [height]="height"
+    oncontextmenu="return false"
+    (mouseup)="onMouseup($event)"
+    (mousedown)="onMousedown($event)"
+  ></canvas>
+</div>

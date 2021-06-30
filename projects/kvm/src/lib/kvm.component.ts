@@ -27,14 +27,13 @@ import { fromEvent, interval, of, Subscription, timer } from 'rxjs';
 import { catchError, finalize, mergeMap, throttleTime } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from './auth.service';
 import { PowerUpAlertComponent } from './shared/power-up-alert/power-up-alert.component';
 import SnackbarDefaults from './shared/config/snackBarDefault';
 
 @Component({
   selector: 'amt-kvm',
   templateUrl: './kvm.component.html',
-  styles: [],
+  styleUrls: []
 })
 export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: false }) canvas: ElementRef | undefined;
@@ -74,9 +73,8 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public snackBar: MatSnackBar,
     public dialog: MatDialog,
-    private readonly authService: AuthService,
     private readonly devicesService: KvmService,
-    @Inject('userInput') public params // public readonly activatedRoute: ActivatedRoute
+    @Inject('userInput') public params
   ) {
     this.deviceId = this.params.deviceId;
     if (environment.mpsServer.includes('/mps')) {
@@ -87,10 +85,6 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.logger = new ConsoleLogger(1);
-    // this.activatedRoute.params.subscribe((params) => {
-    //   this.isLoading = true;
-    //   this.deviceId = params.id;
-    // });
     this.stopSocketSubscription = this.devicesService.stopwebSocket.subscribe(
       () => {
         this.stopKvm();
@@ -121,7 +115,7 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
       '',
       0,
       0,
-      this.authService.getLoggedUserToken(),
+      this.params.authToken,
       this.server
     );
     this.module = new AMTDesktop(this.logger as any, this.context);

@@ -8,6 +8,11 @@
   "projects": {
     "kvm": {
       "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "css"
+        }
+      },
       "root": "projects/kvm",
       "sourceRoot": "projects/kvm/src",
       "prefix": "amt",
@@ -19,9 +24,7 @@
             "project": "projects/kvm/ng-package.json"
           },
           "styles": [
-            "projects/kvm/src/lib/_variables.scss",
-            "projects/kvm/src/lib/styles.scss",
-            "projects/kvm/src/lib/open-amt-theme.scss"
+            "./projects/**/*.css"
           ],
           "configurations": {
             "production": {
