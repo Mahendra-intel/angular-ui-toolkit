@@ -42,7 +42,7 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() deviceStatus: EventEmitter<number> = new EventEmitter<number>();
   @Input() private deviceConnection: EventEmitter<boolean> =
     new EventEmitter<boolean>();
-  @Input() selectedEncoding :   EventEmitter<number> = new EventEmitter<number>();
+  @Input() selectedEncoding: EventEmitter<number> = new EventEmitter<number>();
   stopSocketSubscription!: Subscription;
   startSocketSubscription!: Subscription;
   module: any;
@@ -68,9 +68,7 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
     { value: 2, viewValue: 'RLE 16' },
   ];
 
-  constructor(
-    @Inject('userInput') public params
-  ) {
+  constructor(@Inject('userInput') public params) {
     this.deviceId = this.params.deviceId;
     if (environment.mpsServer.includes('/mps')) {
       //handles kong route
@@ -87,6 +85,10 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stopKvm();
       }
     });
+    this.selectedEncoding.subscribe(data =>{
+      this.selected = data;
+      this.onEncodingChange()
+    })
   }
 
   ngAfterViewInit(): void {

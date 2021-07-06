@@ -153,6 +153,11 @@ class KvmComponent {
                 this.stopKvm();
             }
         });
+        this.selectedEncoding.subscribe(data => {
+            console.log(data, "data+++++S");
+            this.selected = data;
+            this.onEncodingChange();
+        });
     }
     ngAfterViewInit() {
         this.init();

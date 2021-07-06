@@ -122,6 +122,11 @@
                     _this.stopKvm();
                 }
             });
+            this.selectedEncoding.subscribe(function (data) {
+                console.log(data, "data+++++S");
+                _this.selected = data;
+                _this.onEncodingChange();
+            });
         };
         KvmComponent.prototype.ngAfterViewInit = function () {
             this.init();
