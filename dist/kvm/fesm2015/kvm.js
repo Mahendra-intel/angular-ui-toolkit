@@ -153,8 +153,7 @@ class KvmComponent {
                 this.stopKvm();
             }
         });
-        this.selectedEncoding.subscribe(data => {
-            console.log(data, "data+++++S");
+        this.selectedEncoding.subscribe((data) => {
             this.selected = data;
             this.onEncodingChange();
         });
@@ -221,6 +220,11 @@ class KvmComponent {
             this.mouseHelper.mousedown(event);
         }
     }
+    onMousemove(event) {
+        if (this.mouseHelper != null) {
+            this.mouseHelper.mousemove(event);
+        }
+    }
     ngOnDestroy() {
         this.stopKvm();
     }
@@ -231,10 +235,10 @@ KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt
     } if (rf & 2) {
         let _t;
         ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.canvas = _t.first);
-    } }, inputs: { width: "width", height: "height", deviceConnection: "deviceConnection", selectedEncoding: "selectedEncoding" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 3, vars: 2, consts: [["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown"], ["canvas", ""]], template: function KvmComponent_Template(rf, ctx) { if (rf & 1) {
+    } }, inputs: { width: "width", height: "height", deviceConnection: "deviceConnection", selectedEncoding: "selectedEncoding" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 3, vars: 2, consts: [["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown", "mousemove"], ["canvas", ""]], template: function KvmComponent_Template(rf, ctx) { if (rf & 1) {
         ɵɵelementStart(0, "div");
         ɵɵelementStart(1, "canvas", 0, 1);
-        ɵɵlistener("mouseup", function KvmComponent_Template_canvas_mouseup_1_listener($event) { return ctx.onMouseup($event); })("mousedown", function KvmComponent_Template_canvas_mousedown_1_listener($event) { return ctx.onMousedown($event); });
+        ɵɵlistener("mouseup", function KvmComponent_Template_canvas_mouseup_1_listener($event) { return ctx.onMouseup($event); })("mousedown", function KvmComponent_Template_canvas_mousedown_1_listener($event) { return ctx.onMousedown($event); })("mousemove", function KvmComponent_Template_canvas_mousemove_1_listener($event) { return ctx.onMousemove($event); });
         ɵɵelementEnd();
         ɵɵelementEnd();
     } if (rf & 2) {

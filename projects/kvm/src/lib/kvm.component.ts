@@ -85,10 +85,10 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stopKvm();
       }
     });
-    this.selectedEncoding.subscribe(data =>{
+    this.selectedEncoding.subscribe((data) => {
       this.selected = data;
-      this.onEncodingChange()
-    })
+      this.onEncodingChange();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -197,6 +197,12 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
   onMousedown(event: MouseEvent): void {
     if (this.mouseHelper != null) {
       this.mouseHelper.mousedown(event);
+    }
+  }
+
+  onMousemove(event:MouseEvent):void{
+    if (this.mouseHelper != null) {
+      this.mouseHelper.mousemove(event);
     }
   }
 

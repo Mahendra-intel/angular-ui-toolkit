@@ -49,6 +49,7 @@ export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
     stopKvm: () => void;
     onMouseup(event: MouseEvent): void;
     onMousedown(event: MouseEvent): void;
+    onMousemove(event: MouseEvent): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDef<KvmComponent, never>;
     static ɵcmp: i0.ɵɵComponentDefWithMeta<KvmComponent, "amt-kvm", never, { "width": "width"; "height": "height"; "deviceConnection": "deviceConnection"; "selectedEncoding": "selectedEncoding"; }, { "deviceState": "deviceState"; "deviceStatus": "deviceStatus"; }, never, never>;
