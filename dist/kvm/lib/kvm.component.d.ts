@@ -16,6 +16,7 @@ export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
     height: number;
     deviceState: number;
     deviceStatus: EventEmitter<number>;
+    private deviceConnection;
     stopSocketSubscription: Subscription;
     startSocketSubscription: Subscription;
     module: any;
@@ -46,7 +47,6 @@ export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
     onConnectionStateChange: (redirector: any, state: number) => any;
     onRedirectorError(): void;
     init(): void;
-    setAmtFeatures(): void;
     autoConnect(): void;
     onEncodingChange(): void;
     checkPowerStatus(): boolean;
@@ -57,6 +57,6 @@ export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
     onMousedown(event: MouseEvent): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDef<KvmComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<KvmComponent, "amt-kvm", never, { "width": "width"; "height": "height"; }, { "deviceState": "deviceState"; "deviceStatus": "deviceStatus"; }, never, never>;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<KvmComponent, "amt-kvm", never, { "width": "width"; "height": "height"; "deviceConnection": "deviceConnection"; }, { "deviceState": "deviceState"; "deviceStatus": "deviceStatus"; }, never, never>;
 }
 //# sourceMappingURL=kvm.component.d.ts.map

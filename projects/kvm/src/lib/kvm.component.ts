@@ -33,7 +33,7 @@ import SnackbarDefaults from './shared/config/snackBarDefault';
 @Component({
   selector: 'amt-kvm',
   templateUrl: './kvm.component.html',
-  styleUrls: []
+  styleUrls: ['./kvm.component.css'],
 })
 export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: false }) canvas: ElementRef | undefined;
@@ -45,6 +45,8 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() public height = 400;
   @Output() deviceState: number = 0;
   @Output() deviceStatus: EventEmitter<number> = new EventEmitter<number>();
+  @Input() private deviceConnection: EventEmitter<boolean> =
+    new EventEmitter<boolean>();
   stopSocketSubscription!: Subscription;
   startSocketSubscription!: Subscription;
   module: any;
@@ -85,22 +87,17 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.logger = new ConsoleLogger(1);
-    this.stopSocketSubscription = this.devicesService.stopwebSocket.subscribe(
-      () => {
+    this.deviceConnection.subscribe((data) => {
+      if (data === true) {
+        this.init();
+      } else {
         this.stopKvm();
       }
-    );
-    this.startSocketSubscription =
-      this.devicesService.connectKVMSocket.subscribe(() => {
-        this.setAmtFeatures();
-      });
-    this.timeInterval = interval(15000)
-      .pipe(mergeMap(() => this.devicesService.getPowerState(this.deviceId)))
-      .subscribe();
+    });
   }
 
   ngAfterViewInit(): void {
-    this.setAmtFeatures();
+    this.init();
   }
 
   instantiate(): void {
@@ -156,67 +153,11 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   init(): void {
-    this.devicesService
-      .getPowerState(this.deviceId)
-      .pipe(
-        catchError(() => {
-          this.snackBar.open(
-            `Error retrieving power status`,
-            undefined,
-            SnackbarDefaults.defaultError
-          );
-          return of();
-        }),
-        finalize(() => {})
-      )
-      .subscribe((data) => {
-        this.powerState = data;
-        this.isPoweredOn = this.checkPowerStatus();
-        if (!this.isPoweredOn) {
-          this.isLoading = false;
-          const dialog = this.dialog.open(PowerUpAlertComponent);
-          dialog.afterClosed().subscribe((result) => {
-            if (result) {
-              this.isLoading = true;
-              this.devicesService
-                .sendPowerAction(this.deviceId, 2)
-                .pipe()
-                .subscribe((data) => {
-                  this.instantiate();
-                  setTimeout(() => {
-                    this.isLoading = false;
-                    this.autoConnect();
-                  }, 4000);
-                });
-            }
-          });
-        } else {
-          this.instantiate();
-          setTimeout(() => {
-            this.isLoading = false;
-            this.autoConnect();
-          }, 0);
-        }
-      });
-  }
-
-  setAmtFeatures(): void {
-    this.isLoading = true;
-    this.devicesService
-      .setAmtFeatures(this.deviceId)
-      .pipe(
-        catchError(() => {
-          this.snackBar.open(
-            `Error enabling kvm`,
-            undefined,
-            SnackbarDefaults.defaultError
-          );
-          this.init();
-          return of();
-        }),
-        finalize(() => {})
-      )
-      .subscribe(() => this.init());
+    this.instantiate();
+    setTimeout(() => {
+      this.isLoading = false;
+      this.autoConnect();
+    }, 4000);
   }
 
   autoConnect(): void {
@@ -271,15 +212,6 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.timeInterval) {
-      this.timeInterval.unsubscribe();
-    }
     this.stopKvm();
-    if (this.startSocketSubscription) {
-      this.startSocketSubscription.unsubscribe();
-    }
-    if (this.stopSocketSubscription) {
-      this.stopSocketSubscription.unsubscribe();
-    }
   }
 }

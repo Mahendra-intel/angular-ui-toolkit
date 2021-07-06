@@ -1,11 +1,10 @@
-import { EventEmitter, ɵɵinject, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdefineComponent, ɵɵelementStart, ɵɵtext, ɵɵelementEnd, ɵɵadvance, ɵɵproperty, Component, ɵɵdirectiveInject, ɵɵviewQuery, ɵɵqueryRefresh, ɵɵloadQuery, ɵɵlistener, Inject, ViewChild, Input, Output, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { catchError, mergeMap, throttleTime, finalize, tap } from 'rxjs/operators';
+import { EventEmitter, ɵɵinject, ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵdirectiveInject, ɵɵdefineComponent, ɵɵviewQuery, ɵɵqueryRefresh, ɵɵloadQuery, ɵɵelementStart, ɵɵlistener, ɵɵelementEnd, ɵɵadvance, ɵɵproperty, Component, Inject, ViewChild, Input, Output, ɵɵtext, ɵɵdefineNgModule, ɵɵdefineInjector, ɵɵsetNgModuleScope, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { catchError, throttleTime, tap } from 'rxjs/operators';
 import { HttpClient, HttpResponse, HttpErrorResponse, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ConsoleLogger, AMTKvmDataRedirector, Protocol, AMTDesktop, DataProcessor, MouseHelper, KeyBoardHelper } from '@open-amt-cloud-toolkit/ui-toolkit/core';
-import { interval, fromEvent, of, timer, throwError } from 'rxjs';
-import { MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatDialog, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { fromEvent, timer, throwError } from 'rxjs';
 import { MatSnackBar, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -36,6 +35,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -95,58 +95,6 @@ KvmService.ɵprov = ɵɵdefineInjectable({ token: KvmService, factory: KvmServic
             }]
     }], function () { return [{ type: HttpClient }]; }, null); })();
 
-class PowerUpAlertComponent {
-    constructor() { }
-    ngOnInit() {
-    }
-}
-PowerUpAlertComponent.ɵfac = function PowerUpAlertComponent_Factory(t) { return new (t || PowerUpAlertComponent)(); };
-PowerUpAlertComponent.ɵcmp = ɵɵdefineComponent({ type: PowerUpAlertComponent, selectors: [["amt-power-up-alert"]], decls: 9, vars: 1, consts: [["mat-dialog-title", ""], [1, "mat-typography"], ["align", "end"], ["mat-button", "", "mat-dialog-close", ""], ["mat-button", "", "cdkFocusInitial", "", 3, "mat-dialog-close"]], template: function PowerUpAlertComponent_Template(rf, ctx) { if (rf & 1) {
-        ɵɵelementStart(0, "h2", 0);
-        ɵɵtext(1, "Your device is not powered on");
-        ɵɵelementEnd();
-        ɵɵelementStart(2, "mat-dialog-content", 1);
-        ɵɵtext(3, " Do you want to send a power up command to the device?\n");
-        ɵɵelementEnd();
-        ɵɵelementStart(4, "mat-dialog-actions", 2);
-        ɵɵelementStart(5, "button", 3);
-        ɵɵtext(6, "No");
-        ɵɵelementEnd();
-        ɵɵelementStart(7, "button", 4);
-        ɵɵtext(8, "Yes");
-        ɵɵelementEnd();
-        ɵɵelementEnd();
-    } if (rf & 2) {
-        ɵɵadvance(7);
-        ɵɵproperty("mat-dialog-close", true);
-    } }, directives: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose], styles: [""] });
-(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(PowerUpAlertComponent, [{
-        type: Component,
-        args: [{
-                selector: 'amt-power-up-alert',
-                templateUrl: './power-up-alert.component.html',
-                styleUrls: ['./power-up-alert.component.scss']
-            }]
-    }], function () { return []; }, null); })();
-
-const SnackbarDefaults = {
-    defaultError: { duration: 3000, panelClass: ['error', 'mat-elevation-z12'] },
-    longError: { duration: 10000, panelClass: ['error', 'mat-elevation-z12'] },
-    quickError: { duration: 1000, panelClass: ['error', 'mat-elevation-z12'] },
-    defaultSuccess: {
-        duration: 3000,
-        panelClass: ['success', 'mat-elevation-z12'],
-    },
-    longSuccess: {
-        duration: 10000,
-        panelClass: ['success', 'mat-elevation-z12'],
-    },
-    quickSuccess: {
-        duration: 1000,
-        panelClass: ['success', 'mat-elevation-z12'],
-    },
-};
-
 const _c0 = ["canvas"];
 class KvmComponent {
     constructor(snackBar, dialog, devicesService, params) {
@@ -159,6 +107,7 @@ class KvmComponent {
         this.height = 400;
         this.deviceState = 0;
         this.deviceStatus = new EventEmitter();
+        this.deviceConnection = new EventEmitter();
         this.powerState = 0;
         this.btnText = 'Disconnect';
         this.isPoweredOn = false;
@@ -198,19 +147,17 @@ class KvmComponent {
     }
     ngOnInit() {
         this.logger = new ConsoleLogger(1);
-        this.stopSocketSubscription = this.devicesService.stopwebSocket.subscribe(() => {
-            this.stopKvm();
+        this.deviceConnection.subscribe((data) => {
+            if (data === true) {
+                this.init();
+            }
+            else {
+                this.stopKvm();
+            }
         });
-        this.startSocketSubscription =
-            this.devicesService.connectKVMSocket.subscribe(() => {
-                this.setAmtFeatures();
-            });
-        this.timeInterval = interval(15000)
-            .pipe(mergeMap(() => this.devicesService.getPowerState(this.deviceId)))
-            .subscribe();
     }
     ngAfterViewInit() {
-        this.setAmtFeatures();
+        this.init();
     }
     instantiate() {
         var _a, _b;
@@ -240,53 +187,11 @@ class KvmComponent {
         this.reset();
     }
     init() {
-        this.devicesService
-            .getPowerState(this.deviceId)
-            .pipe(catchError(() => {
-            this.snackBar.open(`Error retrieving power status`, undefined, SnackbarDefaults.defaultError);
-            return of();
-        }), finalize(() => { }))
-            .subscribe((data) => {
-            this.powerState = data;
-            this.isPoweredOn = this.checkPowerStatus();
-            if (!this.isPoweredOn) {
-                this.isLoading = false;
-                const dialog = this.dialog.open(PowerUpAlertComponent);
-                dialog.afterClosed().subscribe((result) => {
-                    if (result) {
-                        this.isLoading = true;
-                        this.devicesService
-                            .sendPowerAction(this.deviceId, 2)
-                            .pipe()
-                            .subscribe((data) => {
-                            this.instantiate();
-                            setTimeout(() => {
-                                this.isLoading = false;
-                                this.autoConnect();
-                            }, 4000);
-                        });
-                    }
-                });
-            }
-            else {
-                this.instantiate();
-                setTimeout(() => {
-                    this.isLoading = false;
-                    this.autoConnect();
-                }, 0);
-            }
-        });
-    }
-    setAmtFeatures() {
-        this.isLoading = true;
-        this.devicesService
-            .setAmtFeatures(this.deviceId)
-            .pipe(catchError(() => {
-            this.snackBar.open(`Error enabling kvm`, undefined, SnackbarDefaults.defaultError);
-            this.init();
-            return of();
-        }), finalize(() => { }))
-            .subscribe(() => this.init());
+        this.instantiate();
+        setTimeout(() => {
+            this.isLoading = false;
+            this.autoConnect();
+        }, 4000);
     }
     autoConnect() {
         if (this.redirector != null) {
@@ -319,16 +224,7 @@ class KvmComponent {
         }
     }
     ngOnDestroy() {
-        if (this.timeInterval) {
-            this.timeInterval.unsubscribe();
-        }
         this.stopKvm();
-        if (this.startSocketSubscription) {
-            this.startSocketSubscription.unsubscribe();
-        }
-        if (this.stopSocketSubscription) {
-            this.stopSocketSubscription.unsubscribe();
-        }
     }
 }
 KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(ɵɵdirectiveInject(MatSnackBar), ɵɵdirectiveInject(MatDialog), ɵɵdirectiveInject(KvmService), ɵɵdirectiveInject('userInput')); };
@@ -337,7 +233,7 @@ KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt
     } if (rf & 2) {
         let _t;
         ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.canvas = _t.first);
-    } }, inputs: { width: "width", height: "height" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 3, vars: 2, consts: [["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown"], ["canvas", ""]], template: function KvmComponent_Template(rf, ctx) { if (rf & 1) {
+    } }, inputs: { width: "width", height: "height", deviceConnection: "deviceConnection" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 3, vars: 2, consts: [["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown"], ["canvas", ""]], template: function KvmComponent_Template(rf, ctx) { if (rf & 1) {
         ɵɵelementStart(0, "div");
         ɵɵelementStart(1, "canvas", 0, 1);
         ɵɵlistener("mouseup", function KvmComponent_Template_canvas_mouseup_1_listener($event) { return ctx.onMouseup($event); })("mousedown", function KvmComponent_Template_canvas_mousedown_1_listener($event) { return ctx.onMousedown($event); });
@@ -346,13 +242,13 @@ KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt
     } if (rf & 2) {
         ɵɵadvance(1);
         ɵɵproperty("width", ctx.width)("height", ctx.height);
-    } }, encapsulation: 2 });
+    } }, styles: [".canvas[_ngcontent-%COMP%]{max-height:80%;max-width:100%}"] });
 (function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(KvmComponent, [{
         type: Component,
         args: [{
                 selector: 'amt-kvm',
                 templateUrl: './kvm.component.html',
-                styleUrls: []
+                styleUrls: ['./kvm.component.css'],
             }]
     }], function () { return [{ type: MatSnackBar }, { type: MatDialog }, { type: KvmService }, { type: undefined, decorators: [{
                 type: Inject,
@@ -368,6 +264,8 @@ KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt
             type: Output
         }], deviceStatus: [{
             type: Output
+        }], deviceConnection: [{
+            type: Input
         }] }); })();
 
 class DeviceToolbarComponent {
@@ -409,6 +307,40 @@ AreYouSureDialogComponent.ɵcmp = ɵɵdefineComponent({ type: AreYouSureDialogCo
                 selector: 'amt-are-you-sure',
                 templateUrl: './are-you-sure.component.html',
                 styleUrls: ['./are-you-sure.component.scss']
+            }]
+    }], function () { return []; }, null); })();
+
+class PowerUpAlertComponent {
+    constructor() { }
+    ngOnInit() {
+    }
+}
+PowerUpAlertComponent.ɵfac = function PowerUpAlertComponent_Factory(t) { return new (t || PowerUpAlertComponent)(); };
+PowerUpAlertComponent.ɵcmp = ɵɵdefineComponent({ type: PowerUpAlertComponent, selectors: [["amt-power-up-alert"]], decls: 9, vars: 1, consts: [["mat-dialog-title", ""], [1, "mat-typography"], ["align", "end"], ["mat-button", "", "mat-dialog-close", ""], ["mat-button", "", "cdkFocusInitial", "", 3, "mat-dialog-close"]], template: function PowerUpAlertComponent_Template(rf, ctx) { if (rf & 1) {
+        ɵɵelementStart(0, "h2", 0);
+        ɵɵtext(1, "Your device is not powered on");
+        ɵɵelementEnd();
+        ɵɵelementStart(2, "mat-dialog-content", 1);
+        ɵɵtext(3, " Do you want to send a power up command to the device?\n");
+        ɵɵelementEnd();
+        ɵɵelementStart(4, "mat-dialog-actions", 2);
+        ɵɵelementStart(5, "button", 3);
+        ɵɵtext(6, "No");
+        ɵɵelementEnd();
+        ɵɵelementStart(7, "button", 4);
+        ɵɵtext(8, "Yes");
+        ɵɵelementEnd();
+        ɵɵelementEnd();
+    } if (rf & 2) {
+        ɵɵadvance(7);
+        ɵɵproperty("mat-dialog-close", true);
+    } }, directives: [MatDialogTitle, MatDialogContent, MatDialogActions, MatButton, MatDialogClose], styles: [""] });
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(PowerUpAlertComponent, [{
+        type: Component,
+        args: [{
+                selector: 'amt-power-up-alert',
+                templateUrl: './power-up-alert.component.html',
+                styleUrls: ['./power-up-alert.component.scss']
             }]
     }], function () { return []; }, null); })();
 
