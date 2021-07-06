@@ -3,8 +3,6 @@ import { catchError, throttleTime, tap } from 'rxjs/operators';
 import { HttpClient, HttpResponse, HttpErrorResponse, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ConsoleLogger, AMTKvmDataRedirector, Protocol, AMTDesktop, DataProcessor, MouseHelper, KeyBoardHelper } from '@open-amt-cloud-toolkit/ui-toolkit/core';
 import { fromEvent, timer, throwError } from 'rxjs';
-import { MatSnackBar, MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialog, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -17,12 +15,14 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
@@ -97,10 +97,7 @@ KvmService.ɵprov = ɵɵdefineInjectable({ token: KvmService, factory: KvmServic
 
 const _c0 = ["canvas"];
 class KvmComponent {
-    constructor(snackBar, dialog, devicesService, params) {
-        this.snackBar = snackBar;
-        this.dialog = dialog;
-        this.devicesService = devicesService;
+    constructor(params) {
         this.params = params;
         // //setting a width and height for the canvas
         this.width = 400;
@@ -108,6 +105,7 @@ class KvmComponent {
         this.deviceState = 0;
         this.deviceStatus = new EventEmitter();
         this.deviceConnection = new EventEmitter();
+        this.selectedEncoding = new EventEmitter();
         this.powerState = 0;
         this.btnText = 'Disconnect';
         this.isPoweredOn = false;
@@ -208,11 +206,6 @@ class KvmComponent {
     checkPowerStatus() {
         return this.powerState.powerstate === 2;
     }
-    ngDoCheck() {
-        if (this.selectedAction !== this.previousAction) {
-            this.previousAction = this.selectedAction;
-        }
-    }
     onMouseup(event) {
         if (this.mouseHelper != null) {
             this.mouseHelper.mouseup(event);
@@ -227,13 +220,13 @@ class KvmComponent {
         this.stopKvm();
     }
 }
-KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(ɵɵdirectiveInject(MatSnackBar), ɵɵdirectiveInject(MatDialog), ɵɵdirectiveInject(KvmService), ɵɵdirectiveInject('userInput')); };
+KvmComponent.ɵfac = function KvmComponent_Factory(t) { return new (t || KvmComponent)(ɵɵdirectiveInject('userInput')); };
 KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt-kvm"]], viewQuery: function KvmComponent_Query(rf, ctx) { if (rf & 1) {
         ɵɵviewQuery(_c0, 1);
     } if (rf & 2) {
         let _t;
         ɵɵqueryRefresh(_t = ɵɵloadQuery()) && (ctx.canvas = _t.first);
-    } }, inputs: { width: "width", height: "height", deviceConnection: "deviceConnection" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 3, vars: 2, consts: [["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown"], ["canvas", ""]], template: function KvmComponent_Template(rf, ctx) { if (rf & 1) {
+    } }, inputs: { width: "width", height: "height", deviceConnection: "deviceConnection", selectedEncoding: "selectedEncoding" }, outputs: { deviceState: "deviceState", deviceStatus: "deviceStatus" }, decls: 3, vars: 2, consts: [["oncontextmenu", "return false", 1, "canvas", 3, "width", "height", "mouseup", "mousedown"], ["canvas", ""]], template: function KvmComponent_Template(rf, ctx) { if (rf & 1) {
         ɵɵelementStart(0, "div");
         ɵɵelementStart(1, "canvas", 0, 1);
         ɵɵlistener("mouseup", function KvmComponent_Template_canvas_mouseup_1_listener($event) { return ctx.onMouseup($event); })("mousedown", function KvmComponent_Template_canvas_mousedown_1_listener($event) { return ctx.onMousedown($event); });
@@ -250,7 +243,7 @@ KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt
                 templateUrl: './kvm.component.html',
                 styleUrls: ['./kvm.component.css'],
             }]
-    }], function () { return [{ type: MatSnackBar }, { type: MatDialog }, { type: KvmService }, { type: undefined, decorators: [{
+    }], function () { return [{ type: undefined, decorators: [{
                 type: Inject,
                 args: ['userInput']
             }] }]; }, { canvas: [{
@@ -265,6 +258,8 @@ KvmComponent.ɵcmp = ɵɵdefineComponent({ type: KvmComponent, selectors: [["amt
         }], deviceStatus: [{
             type: Output
         }], deviceConnection: [{
+            type: Input
+        }], selectedEncoding: [{
             type: Input
         }] }); })();
 

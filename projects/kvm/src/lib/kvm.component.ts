@@ -22,13 +22,8 @@ import {
   Protocol,
 } from '@open-amt-cloud-toolkit/ui-toolkit/core';
 import { environment } from '../environments/environment';
-import { KvmService } from './kvm.service';
-import { fromEvent, interval, of, Subscription, timer } from 'rxjs';
-import { catchError, finalize, mergeMap, throttleTime } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { PowerUpAlertComponent } from './shared/power-up-alert/power-up-alert.component';
-import SnackbarDefaults from './shared/config/snackBarDefault';
+import { fromEvent, Subscription, timer } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
 
 @Component({
   selector: 'amt-kvm',
@@ -47,6 +42,7 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() deviceStatus: EventEmitter<number> = new EventEmitter<number>();
   @Input() private deviceConnection: EventEmitter<boolean> =
     new EventEmitter<boolean>();
+  @Input() selectedEncoding :   EventEmitter<number> = new EventEmitter<number>();
   stopSocketSubscription!: Subscription;
   startSocketSubscription!: Subscription;
   module: any;
@@ -73,9 +69,6 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   constructor(
-    public snackBar: MatSnackBar,
-    public dialog: MatDialog,
-    private readonly devicesService: KvmService,
     @Inject('userInput') public params
   ) {
     this.deviceId = this.params.deviceId;
@@ -192,12 +185,6 @@ export class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
     this.keyboardHelper.UnGrabKeyInput();
     this.reset();
   };
-
-  ngDoCheck(): void {
-    if (this.selectedAction !== this.previousAction) {
-      this.previousAction = this.selectedAction;
-    }
-  }
 
   onMouseup(event: MouseEvent): void {
     if (this.mouseHelper != null) {

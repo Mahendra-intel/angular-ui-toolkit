@@ -1,14 +1,8 @@
 import { AfterViewInit, ElementRef, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { IDataProcessor, ILogger, KeyBoardHelper, MouseHelper } from '@open-amt-cloud-toolkit/ui-toolkit/core';
-import { KvmService } from './kvm.service';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import * as i0 from "@angular/core";
 export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
-    snackBar: MatSnackBar;
-    dialog: MatDialog;
-    private readonly devicesService;
     params: any;
     canvas: ElementRef | undefined;
     context: CanvasRenderingContext2D;
@@ -17,6 +11,7 @@ export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
     deviceState: number;
     deviceStatus: EventEmitter<number>;
     private deviceConnection;
+    selectedEncoding: EventEmitter<number>;
     stopSocketSubscription: Subscription;
     startSocketSubscription: Subscription;
     module: any;
@@ -40,7 +35,7 @@ export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
         value: number;
         viewValue: string;
     }[];
-    constructor(snackBar: MatSnackBar, dialog: MatDialog, devicesService: KvmService, params: any);
+    constructor(params: any);
     ngOnInit(): void;
     ngAfterViewInit(): void;
     instantiate(): void;
@@ -52,11 +47,10 @@ export declare class KvmComponent implements OnInit, AfterViewInit, OnDestroy {
     checkPowerStatus(): boolean;
     reset: () => void;
     stopKvm: () => void;
-    ngDoCheck(): void;
     onMouseup(event: MouseEvent): void;
     onMousedown(event: MouseEvent): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDef<KvmComponent, never>;
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<KvmComponent, "amt-kvm", never, { "width": "width"; "height": "height"; "deviceConnection": "deviceConnection"; }, { "deviceState": "deviceState"; "deviceStatus": "deviceStatus"; }, never, never>;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<KvmComponent, "amt-kvm", never, { "width": "width"; "height": "height"; "deviceConnection": "deviceConnection"; "selectedEncoding": "selectedEncoding"; }, { "deviceState": "deviceState"; "deviceStatus": "deviceStatus"; }, never, never>;
 }
 //# sourceMappingURL=kvm.component.d.ts.map
